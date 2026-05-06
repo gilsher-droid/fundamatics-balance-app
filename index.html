@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fundamatics — Horizontal Asymptote Balance</title>
+
+  <style>
+    :root{
+      --blue:#4D9DFF;
+      --deep:#2F7EEA;
+      --violet:#7F5CFF;
+      --pink:#FF5DAA;
+      --yellow:#FFD35A;
+      --orange:#FF9F43;
+      --dark:#102033;
+      --card:rgba(255,255,255,.94);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at 80% 10%, rgba(255,255,255,.28), transparent 30%),
+        radial-gradient(circle at 15% 0%, rgba(255,211,90,.18), transparent 28%),
+        linear-gradient(135deg,var(--blue),var(--deep),var(--violet));
+      color:var(--dark);
+      padding:24px;
+    }
+
+    .container{
+      max-width:1200px;
+      margin:auto;
+    }
+
+    .hero{
+      text-align:center;
+      color:white;
+      margin-bottom:24px;
+    }
+
+    .hero img{
+      width:90px;
+      height:90px;
+      border-radius:24px;
+      object-fit:cover;
+      background:white;
+      box-shadow:0 12px 28px rgba(0,0,0,.2);
+      margin-bottom:14px;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:42px;
+    }
+
+    .hero p{
+      margin-top:10px;
+      font-size:18px;
+      opacity:.95;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:32px;
+      padding:28px;
+      box-shadow:0 30px 70px rgba(0,0,0,.22);
+      backdrop-filter:blur(12px);
+    }
+
+    .top{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      margin-bottom:22px;
+    }
+
+    .panel{
+      background:white;
+      border-radius:24px;
+      padding:20px;
+      border:2px solid #e8eef8;
+    }
+
+    textarea{
+      width:100%;
+      height:100px;
+      border-radius:16px;
+      border:1px solid #cfd8e8;
+      padding:14px;
+      font-size:16px;
+      direction:ltr;
+      font-family:monospace;
+    }
+
+    button{
+      border:none;
+      border-radius:16px;
+      padding:14px 18px;
+      color:white;
+      cursor:pointer;
+      font-weight:700;
+      margin-top:12px;
+      margin-left:8px;
+      background:linear-gradient(135deg,var(--violet),var(--deep));
+      box-shadow:0 10px 24px rgba(47,126,234,.24);
+    }
+
+    button.secondary{
+      background:linear-gradient(135deg,var(--pink),var(--orange));
+    }
+
+    .fraction{
+      display:inline-grid;
+      grid-template-rows:auto 4px auto;
+      gap:8px;
+      align-items:center;
+      font-size:34px;
+      font-weight:bold;
+      direction:ltr;
+      min-width:360px;
+    }
+
+    .fraction-line{
+      height:4px;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--pink),var(--yellow),var(--blue));
+    }
+
+    .function-box{
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .balance-scene{
+      position:relative;
+      height:420px;
+      overflow:hidden;
+      border-radius:28px;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,211,90,.22), transparent 25%),
+        linear-gradient(#f8fbff,#eef5ff);
+      border:1px solid #dbe8f7;
+    }
+
+    .sky-label,
+    .ground-label{
+      position:absolute;
+      width:100%;
+      text-align:center;
+      font-weight:bold;
+      z-index:5;
+    }
+
+    .sky-label{
+      top:18px;
+      color:#2F7EEA;
+      font-size:24px;
+    }
+
+    .ground-label{
+      bottom:16px;
+      color:#56703b;
+      font-size:22px;
+    }
+
+    .beam{
+      position:absolute;
+      width:600px;
+      height:14px;
+      left:50%;
+      top:185px;
+      transform:translateX(-50%);
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--violet),var(--deep),var(--pink));
+      transition:1s;
+      z-index:3;
+    }
+
+    .pivot{
+      position:absolute;
+      left:50%;
+      top:198px;
+      transform:translateX(-50%);
+      width:0;
+      height:0;
+      border-left:44px solid transparent;
+      border-right:44px solid transparent;
+      border-bottom:130px solid var(--dark);
+      z-index:2;
+    }
+
+    .weight{
+      position:absolute;
+      width:130px;
+      height:90px;
+      border-radius:24px;
+      background:linear-gradient(135deg,var(--yellow),var(--orange));
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:32px;
+      font-weight:bold;
+      box-shadow:0 12px 24px rgba(0,0,0,.16);
+      transition:1s;
+      z-index:6;
+    }
+
+    .left{
+      left:240px;
+      top:245px;
+    }
+
+    .right{
+      right:240px;
+      top:245px;
+    }
+
+    .rocket,
+    .seed,
+    .judge{
+      position:absolute;
+      opacity:0;
+      transition:1s;
+      z-index:10;
+    }
+
+    .rocket{
+      font-size:90px;
+      left:140px;
+      bottom:-120px;
+    }
+
+    .seed{
+      font-size:90px;
+      right:130px;
+      top:-120px;
+    }
+
+    .judge{
+      left:50%;
+      top:40px;
+      transform:translateX(-50%) scale(.4);
+      text-align:center;
+      font-size:90px;
+    }
+
+    .judge span{
+      display:block;
+      background:white;
+      border-radius:999px;
+      padding:8px 14px;
+      font-size:18px;
+      margin-top:6px;
+      box-shadow:0 6px 18px rgba(0,0,0,.15);
+    }
+
+    .result{
+      margin-top:24px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:20px;
+    }
+
+    .result-box{
+      background:white;
+      border-radius:24px;
+      padding:20px;
+      border:2px solid #e8eef8;
+    }
+
+    .answer{
+      font-size:52px;
+      font-weight:bold;
+      color:var(--deep);
+      text-align:center;
+      margin-top:30px;
+    }
+
+    .go-sky .beam{
+      transform:translateX(-50%) rotate(-12deg);
+    }
+
+    .go-ground .beam{
+      transform:translateX(-50%) rotate(12deg);
+    }
+
+    .go-sky .rocket{
+      opacity:1;
+      bottom:250px;
+    }
+
+    .go-ground .seed{
+      opacity:1;
+      top:240px;
+    }
+
+    .equal .judge{
+      opacity:1;
+      transform:translateX(-50%) scale(1);
+    }
+
+    @media(max-width:900px){
+      .top,.result{
+        grid-template-columns:1fr;
+      }
+
+      .beam{
+        width:420px;
+      }
+
+      .left{
+        left:70px;
+      }
+
+      .right{
+        right:70px;
+      }
+
+      .fraction{
+        min-width:240px;
+        font-size:26px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="hero">
+
+    <img src="assets/images/logo.jpeg" alt="Fundamatics Logo">
+
+    <h1>Fundamatics</h1>
+
+    <p>
+      Horizontal Asymptote Balance Model
+    </p>
+
+  </div>
+
+  <div class="card">
+
+    <div class="function-box">
+
+      <div class="fraction">
+
+        <div id="numView">3x² + 1</div>
+
+        <div class="fraction-line"></div>
+
+        <div id="denView">6x² - 4</div>
+
+      </div>
+
+    </div>
+
+    <div class="top">
+
+      <div class="panel">
+
+        <h3>הכנס פונקציה רציונלית</h3>
+
+        <textarea id="funcInput">(3x^2 + 1)/(6x^2 - 4)</textarea>
+
+        <button onclick="analyzeFunction()">
+          Analyze
+        </button>
+
+        <button class="secondary" onclick="randomFunction()">
+          Random Function
+        </button>
+
+      </div>
+
+      <div class="panel">
+
+        <h3>איך זה עובד?</h3>
+
+        <p>
+          המונה הוא משקולת אחת.
+        </p>
+
+        <p>
+          המכנה הוא משקולת שנייה.
+        </p>
+
+        <p>
+          המשקל נקבע לפי החזקה הגבוהה ביותר של x.
+        </p>
+
+        <p>
+          אם המשקלים שווים — השופט בודק את המקדמים.
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="balance-scene" id="scene">
+
+      <div class="sky-label">
+        המונה כבד יותר → הולכים לשמיים
+      </div>
+
+      <div class="ground-label">
+        המכנה כבד יותר → y = 0
+      </div>
+
+      <div class="judge">
+        👨‍⚖️
+        <span>השופט בודק מקדמים</span>
+      </div>
+
+      <div class="rocket">
+        🚀
+      </div>
+
+      <div class="seed">
+        🌱
+      </div>
+
+      <div class="beam"></div>
+
+      <div class="pivot"></div>
+
+      <div class="weight left" id="leftWeight">
+        x²
+      </div>
+
+      <div class="weight right" id="rightWeight">
+        x²
+      </div>
+
+    </div>
+
+    <div class="result">
+
+      <div class="result-box">
+
+        <h2>
+          מה המאזניים אומרים?
+        </h2>
+
+        <div id="explanation"></div>
+
+      </div>
+
+      <div class="result-box">
+
+        <h2>
+          האסימפטוטה האופקית
+        </h2>
+
+        <div class="answer" id="answer"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function superscript(n){
+  return String(n)
+    .replace(/0/g,"⁰")
+    .replace(/1/g,"¹")
+    .replace(/2/g,"²")
+    .replace(/3/g,"³")
+    .replace(/4/g,"⁴")
+    .replace(/5/g,"⁵")
+    .replace(/6/g,"⁶")
+    .replace(/7/g,"⁷")
+    .replace(/8/g,"⁸")
+    .replace(/9/g,"⁹");
+}
+
+function parsePolynomial(poly){
+
+  poly = poly.replace(/\s/g,'');
+
+  let terms = poly.match(/[+-]?[^+-]+/g);
+
+  let bestDegree = -1;
+  let bestCoef = 0;
+
+  for(let t of terms){
+
+    let degree = 0;
+    let coef = 0;
+
+    if(t.includes('x')){
+
+      let coefPart = t.split('x')[0];
+
+      if(coefPart === '' || coefPart === '+'){
+        coef = 1;
+      }
+      else if(coefPart === '-'){
+        coef = -1;
+      }
+      else{
+        coef = Number(coefPart);
+      }
+
+      let pow = t.match(/\^(\d+)/);
+
+      degree = pow ? Number(pow[1]) : 1;
+
+    }else{
+
+      coef = Number(t);
+      degree = 0;
+
+    }
+
+    if(degree > bestDegree){
+
+      bestDegree = degree;
+      bestCoef = coef;
+
+    }
+
+  }
+
+  return {
+    degree:bestDegree,
+    coef:bestCoef
+  };
+
+}
+
+function analyzeFunction(){
+
+  let scene = document.getElementById('scene');
+
+  scene.className = 'balance-scene';
+
+  let input = document.getElementById('funcInput').value;
+
+  let parts = input.split('/');
+
+  let numerator = parts[0]
+    .replace(/[()]/g,'');
+
+  let denominator = parts[1]
+    .replace(/[()]/g,'');
+
+  document.getElementById('numView')
+    .innerHTML = numerator.replace(/\^(\d+)/g,(m,n)=>superscript(n));
+
+  document.getElementById('denView')
+    .innerHTML = denominator.replace(/\^(\d+)/g,(m,n)=>superscript(n));
+
+  let n = parsePolynomial(numerator);
+
+  let d = parsePolynomial(denominator);
+
+  document.getElementById('leftWeight')
+    .innerHTML = 'x' + superscript(n.degree);
+
+  document.getElementById('rightWeight')
+    .innerHTML = 'x' + superscript(d.degree);
+
+  let explanation = '';
+  let answer = '';
+
+  if(n.degree > d.degree){
+
+    scene.classList.add('go-sky');
+
+    explanation =
+      'המונה כבד יותר ולכן הפונקציה לא מתייצבת על גובה קבוע — היא הולכת לשמיים או למינוס שמיים.';
+
+    answer = 'אין';
+
+  }
+
+  else if(n.degree < d.degree){
+
+    scene.classList.add('go-ground');
+
+    explanation =
+      'המכנה כבד יותר. משהו קל חלקי משהו כבד מאוד מתקרב ל־0.';
+
+    answer = 'y = 0';
+
+  }
+
+  else{
+
+    scene.classList.add('equal');
+
+    let ratio = (n.coef / d.coef).toFixed(2);
+
+    explanation =
+      'המשקלים זהים ולכן השופט בודק את יחס המקדמים של האיברים המובילים.';
+
+    answer = 'y = ' + ratio;
+
+  }
+
+  document.getElementById('explanation')
+    .innerHTML = explanation;
+
+  document.getElementById('answer')
+    .innerHTML = answer;
+
+}
+
+function randomFunction(){
+
+  let cases = ['sky','ground','equal'];
+
+  let type =
+    cases[Math.floor(Math.random()*cases.length)];
+
+  let nd,dd;
+
+  if(type === 'sky'){
+
+    dd = Math.floor(Math.random()*3)+1;
+    nd = dd + 1;
+
+  }
+
+  else if(type === 'ground'){
+
+    nd = Math.floor(Math.random()*3)+1;
+    dd = nd + 1;
+
+  }
+
+  else{
+
+    nd = dd = Math.floor(Math.random()*4)+1;
+
+  }
+
+  let nc = Math.floor(Math.random()*8)+1;
+  let dc = Math.floor(Math.random()*8)+1;
+
+  let func =
+    `(${nc}x^${nd}+1)/(${dc}x^${dd}-4)`;
+
+  document.getElementById('funcInput')
+    .value = func;
+
+  analyzeFunction();
+
+}
+
+analyzeFunction();
+
+</script>
+
+</body>
+</html>
