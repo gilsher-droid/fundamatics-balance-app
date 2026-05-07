@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -29,25 +30,25 @@
     .function-title{font-weight:bold;font-size:20px;margin-bottom:12px}
     .fraction{display:inline-grid;grid-template-rows:auto 3px auto;gap:8px;align-items:center;font-size:32px;font-weight:bold;direction:ltr;min-width:360px}.lead-coef{display:inline-block;background:linear-gradient(135deg,var(--fm-yellow),var(--fm-orange));color:var(--fm-ink);border-radius:12px;padding:2px 8px;box-shadow:0 6px 14px rgba(16,32,51,.16);transform:scale(1.06)}.coef-calc{margin-top:14px;padding:14px;border-radius:18px;background:linear-gradient(135deg,#fff7d6,#eef6ff);border:2px solid #ffe08a;text-align:center;font-size:24px;font-weight:800;direction:ltr;color:var(--fm-ink)}
     .line{height:4px;background:linear-gradient(90deg,var(--fm-pink),var(--fm-yellow),var(--fm-blue));border-radius:4px}.poly{padding:0 12px}
-    .controls{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:18px}.box{background:white;border-radius:24px;padding:18px;border:2px solid #e8eef8;box-shadow:0 10px 28px rgba(16,32,51,.08)}
+    .controls{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:18px}.box{background:white;border-radius:24px;padding:18px;border:2px solid #e8eef8;box-shadow:0 10px 28px rgba(16,32,51,.08)}
     textarea{width:100%;height:92px;border-radius:14px;border:1px solid #cdd8e8;padding:12px;font-size:16px;direction:ltr;text-align:left;font-family:monospace;resize:vertical}
     label{display:block;font-weight:bold;margin-bottom:10px;font-size:17px}.hint{font-size:14px;color:#52657a;line-height:1.45;margin-top:8px}
     input{width:100%;padding:12px;border-radius:12px;border:1px solid #cdd8e8;font-size:18px;text-align:center}
     button{border:0;border-radius:16px;background:linear-gradient(135deg,var(--fm-violet),var(--fm-blue-deep));color:white;padding:12px 18px;font-size:16px;cursor:pointer;margin:6px;box-shadow:0 10px 22px rgba(47,126,234,.25);font-weight:700}button.secondary{background:linear-gradient(135deg,var(--fm-pink),var(--fm-orange))}
     .balance-area{position:relative;height:390px;background:radial-gradient(circle at 50% 18%,rgba(255,211,90,.18),transparent 28%),linear-gradient(#f9fcff,#eef6ff);border-radius:28px;overflow:hidden;margin:20px 0;border:1px solid #dbe8f7;box-shadow:inset 0 0 0 1px rgba(255,255,255,.7)}
     .sky,.ground{position:absolute;left:0;right:0;text-align:center;font-weight:bold;opacity:0;transition:.5s ease;z-index:9;pointer-events:none}.sky{top:18px;color:#2F7EEA;font-size:22px}.ground{bottom:14px;color:#4b6b38;font-size:22px}.go-sky .sky{opacity:.95}.go-ground .ground{opacity:.95}
-    .beam{position:absolute;width:570px;height:14px;background:linear-gradient(90deg,var(--fm-violet),var(--fm-blue-deep),var(--fm-pink));border-radius:20px;left:50%;top:178px;transform:translateX(-50%) rotate(0deg);transform-origin:center;transition:.8s cubic-bezier(.2,.9,.2,1);z-index:4}
+    .beam{position:absolute;width:min(570px,76vw);height:14px;background:linear-gradient(90deg,var(--fm-violet),var(--fm-blue-deep),var(--fm-pink));border-radius:20px;left:50%;top:178px;transform:translateX(-50%) rotate(0deg);transform-origin:center;transition:.8s cubic-bezier(.2,.9,.2,1);z-index:4}
     .pivot{position:absolute;left:50%;top:190px;transform:translateX(-50%);width:0;height:0;border-left:42px solid transparent;border-right:42px solid transparent;border-bottom:125px solid var(--fm-ink);z-index:3}
-    .pan{position:absolute;top:224px;width:190px;height:18px;background:var(--fm-ink);border-radius:50%;transition:.8s cubic-bezier(.2,.9,.2,1);text-align:center;color:white;font-weight:bold;padding-top:22px;z-index:5}.pan.left{left:215px}.pan.right{right:215px}
-    .chain{position:absolute;top:188px;width:2px;height:48px;background:#26384f;transition:.8s cubic-bezier(.2,.9,.2,1);z-index:4}.chain.left{left:310px}.chain.right{right:310px}
-    .weight{position:absolute;width:118px;height:82px;border-radius:22px;background:linear-gradient(135deg,var(--fm-yellow),var(--fm-orange));display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;box-shadow:0 10px 20px rgba(0,0,0,.18);transition:.8s cubic-bezier(.2,.9,.2,1);z-index:6}.weight.left{left:251px;top:242px}.weight.right{right:251px;top:242px}
+    .pan{position:absolute;top:224px;width:190px;height:18px;background:var(--fm-ink);border-radius:50%;transition:.8s cubic-bezier(.2,.9,.2,1);text-align:center;color:white;font-weight:bold;padding-top:22px;z-index:5}.pan.left{left:clamp(54px,19vw,215px)}.pan.right{right:clamp(54px,19vw,215px)}
+    .chain{position:absolute;top:188px;width:2px;height:48px;background:#26384f;transition:.8s cubic-bezier(.2,.9,.2,1);z-index:4}.chain.left{left:clamp(148px,27vw,310px)}.chain.right{right:clamp(148px,27vw,310px)}
+    .weight{position:absolute;width:118px;height:82px;border-radius:22px;background:linear-gradient(135deg,var(--fm-yellow),var(--fm-orange));display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:bold;box-shadow:0 10px 20px rgba(0,0,0,.18);transition:.8s cubic-bezier(.2,.9,.2,1);z-index:6}.weight.left{left:clamp(96px,22vw,251px);top:242px}.weight.right{right:clamp(96px,22vw,251px);top:242px}
     .rocket,.seed,.judge{position:absolute;opacity:0;transition:.7s ease;z-index:8}.rocket{left:160px;bottom:-80px;font-size:76px}.seed{right:150px;top:-80px;font-size:78px}.judge{left:50%;top:32px;transform:translateX(-50%) scale(.4);font-size:86px;text-align:center}.judge small{display:block;font-size:18px;background:white;border-radius:999px;padding:6px 12px;margin-top:4px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
     .go-sky .rocket{opacity:1;bottom:260px;transform:translateY(-20px)}.go-ground .seed{opacity:1;top:245px;transform:translateY(20px)}.equal .judge{opacity:1;transform:translateX(-50%) scale(1)}.equal .sky,.equal .ground{opacity:0}
     .go-sky .beam{transform:translateX(-50%) rotate(-13deg)}.go-ground .beam{transform:translateX(-50%) rotate(13deg)}.equal .beam{transform:translateX(-50%) rotate(0deg)}
     .go-sky .weight.left{top:285px}.go-sky .weight.right{top:210px}.go-sky .pan.left{top:267px}.go-sky .pan.right{top:192px}.go-sky .chain.left{height:86px}.go-sky .chain.right{height:34px}
     .go-ground .weight.left{top:210px}.go-ground .weight.right{top:285px}.go-ground .pan.left{top:192px}.go-ground .pan.right{top:267px}.go-ground .chain.left{height:34px}.go-ground .chain.right{height:86px}
     .result{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;align-items:stretch}.explain,.formula{background:white;border-radius:22px;padding:20px;border:2px solid #e8eef8}.explain h2,.formula h2{margin-top:0}.asym{font-size:42px;font-weight:bold;color:var(--fm-blue-deep);text-align:center;margin-top:28px}.note{font-size:18px;line-height:1.65}.error{color:#d33;font-weight:bold;margin-top:10px}.examples{text-align:center;margin-top:18px}.tag{display:inline-block;background:rgba(255,255,255,.8);border:1px solid #d6e6ff;border-radius:999px;padding:8px 12px;margin:4px;font-size:14px;color:var(--fm-ink);box-shadow:0 6px 16px rgba(16,32,51,.08)}
-    @media(max-width:850px){.controls,.result{grid-template-columns:1fr}.beam{width:420px}.pan.left{left:70px}.pan.right{right:70px}.chain.left{left:165px}.chain.right{right:165px}.weight.left{left:106px}.weight.right{right:106px}.fraction{min-width:260px;font-size:25px}.sky,.ground{font-size:18px}}
+    @media(max-width:850px){body{padding:14px}.panel{padding:16px;border-radius:24px}header h1{font-size:28px}.function-title{font-size:18px}.fraction{min-width:0;width:100%;font-size:clamp(22px,6vw,30px)}.controls,.result{grid-template-columns:1fr}.balance-area{height:430px}.beam{width:min(420px,78vw)}.pan{width:34vw;max-width:160px}.sky,.ground{font-size:clamp(16px,4vw,19px);padding:0 10px}.weight{width:clamp(86px,22vw,118px);height:clamp(64px,16vw,82px);font-size:clamp(22px,6vw,30px)}.rocket,.seed{font-size:clamp(58px,16vw,76px)}.judge{font-size:clamp(62px,18vw,86px)}.judge small{font-size:14px}.asym{font-size:36px}.note{font-size:16px}.coef-calc{font-size:20px}}.beam{width:420px}.pan.left{left:70px}.pan.right{right:70px}.chain.left{left:165px}.chain.right{right:165px}.weight.left{left:106px}.weight.right{right:106px}.fraction{min-width:260px;font-size:25px}.sky,.ground{font-size:18px}}
   </style>
 </head>
 <body>
@@ -69,13 +70,6 @@
         <div id="err" class="error"></div>
         <button onclick="parseAndUpdate()">נתח פונקציה</button>
         <button class="secondary" onclick="randomFunction()">הגרל פונקציה</button>
-      </div>
-      <div class="box">
-        <label>עריכה ידנית של המאזניים</label>
-        <label>חזקה גבוהה במונה</label><input id="numDeg" type="number" value="2" min="0" />
-        <label style="margin-top:10px">מקדם מוביל במונה</label><input id="numCoef" type="number" value="3" step="0.1" />
-        <label style="margin-top:10px">חזקה גבוהה במכנה</label><input id="denDeg" type="number" value="2" min="0" />
-        <label style="margin-top:10px">מקדם מוביל במכנה</label><input id="denCoef" type="number" value="6" step="0.1" />
       </div>
     </div>
     <div class="balance-area" id="scene">
@@ -101,7 +95,7 @@
   </div>
 </div>
 <script>
-const numDeg=document.getElementById('numDeg'), denDeg=document.getElementById('denDeg'), numCoef=document.getElementById('numCoef'), denCoef=document.getElementById('denCoef');
+let currentNumDeg=2, currentDenDeg=2, currentNumCoef=3, currentDenCoef=6;
 const explanation=document.getElementById('explanation'), answer=document.getElementById('answer'), wL=document.getElementById('wL'), wR=document.getElementById('wR'), scene=document.getElementById('scene'), err=document.getElementById('err');
 const numView=document.getElementById('numView'), denView=document.getElementById('denView'), funcInput=document.getElementById('funcInput');
 function toSup(n){return String(n).split('').map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]||c).join('')} function powLabel(d){return d==0?'1':d==1?'x':'x'+toSup(d)}
@@ -110,10 +104,10 @@ function highlightLeading(poly,lead){let p=pretty(poly); if(lead.deg===0){return
 function leading(poly){let p=clean(poly); if(!p) throw new Error('חסר ביטוי'); p=p.replace(/-/g,'+-'); if(p[0]==='+')p=p.slice(1); let terms=p.split('+').filter(Boolean); let bestDeg=-1,bestCoef=0; for(const t of terms){let deg=0,coef=0;if(t.includes('x')){let before=t.split('x')[0]; if(before===''||before==='+')coef=1; else if(before==='-')coef=-1; else coef=Number(before.replace('*','')); let pow=t.match(/x\^(-?\d+)/); deg=pow?Number(pow[1]):1;} else {coef=Number(t);deg=0;} if(Number.isNaN(coef)) throw new Error('לא הצלחתי לקרוא את אחד האיברים: '+t); if(deg>bestDeg){bestDeg=deg;bestCoef=coef;}} return {deg:bestDeg,coef:bestCoef};}
 function splitFraction(input){let s=clean(input); if(s.startsWith('(')){let depth=0,close=-1; for(let i=0;i<s.length;i++){if(s[i]=='(')depth++; if(s[i]==')')depth--; if(depth==0){close=i;break;}} if(close>-1 && s[close+1]=='/' && s[close+2]=='(' && s.endsWith(')')) return [s.slice(1,close),s.slice(close+3,-1)];}
 let parts=s.split('/'); if(parts.length!==2) throw new Error('כתוב פונקציה בצורה מונה/מכנה, למשל (3x^2+1)/(6x^2-4)'); return parts;}
-function parseAndUpdate(){try{err.textContent=''; const [n,d]=splitFraction(funcInput.value); const nl=leading(n), dl=leading(d); numDeg.value=nl.deg; denDeg.value=dl.deg; numCoef.value=nl.coef; denCoef.value=dl.coef; numView.innerHTML=highlightLeading(n,nl); denView.innerHTML=highlightLeading(d,dl); update();}catch(e){err.textContent=e.message;}}
-function update(){const nd=+numDeg.value, dd=+denDeg.value, nc=+numCoef.value, dc=+denCoef.value; wL.textContent=powLabel(nd); wR.textContent=powLabel(dd); scene.className='balance-area'; let text='',ans=''; if(nd>dd){scene.classList.add('go-sky'); text=`המונה שוקל יותר: החזקה הגבוהה במונה היא ${nd}, ובמכנה ${dd}. לכן הפונקציה לא מתייצבת על גובה קבוע — היא הולכת לשמיים או למינוס שמיים. אין אסימפטוטה אופקית.`; ans='אין';} else if(nd<dd){scene.classList.add('go-ground'); text=`המכנה שוקל יותר: החזקה הגבוהה במכנה היא ${dd}, ובמונה ${nd}. משהו קל חלקי משהו שהולך ונהיה כבד מאוד מתקרב לאפס. לכן אנחנו הולכים לאדמה.`; ans='y = 0';} else {scene.classList.add('equal'); const val=dc===0?'לא מוגדר':+(nc/dc).toFixed(3); text=`המשקלים זהים: בשני הצדדים החזקה הגבוהה היא ${nd}. עכשיו לא החזקות מכריעות, אלא השופט — המקדמים. לכן בודקים את היחס בין המקדם המוביל במונה למקדם המוביל במכנה:<div class="coef-calc">${nc} ÷ ${dc} = ${val}</div>`; ans=dc===0?'לא מוגדר':`y = ${val}`;} explanation.innerHTML=text; answer.textContent=ans;}
+function parseAndUpdate(){try{err.textContent=''; const [n,d]=splitFraction(funcInput.value); const nl=leading(n), dl=leading(d); currentNumDeg=nl.deg; currentDenDeg=dl.deg; currentNumCoef=nl.coef; currentDenCoef=dl.coef; numView.innerHTML=highlightLeading(n,nl); denView.innerHTML=highlightLeading(d,dl); update();}catch(e){err.textContent=e.message;}}
+function update(){const nd=currentNumDeg, dd=currentDenDeg, nc=currentNumCoef, dc=currentDenCoef; wL.textContent=powLabel(nd); wR.textContent=powLabel(dd); scene.className='balance-area'; let text='',ans=''; if(nd>dd){scene.classList.add('go-sky'); text=`המונה שוקל יותר: החזקה הגבוהה במונה היא ${nd}, ובמכנה ${dd}. לכן הפונקציה לא מתייצבת על גובה קבוע — היא הולכת לשמיים או למינוס שמיים. אין אסימפטוטה אופקית.`; ans='אין';} else if(nd<dd){scene.classList.add('go-ground'); text=`המכנה שוקל יותר: החזקה הגבוהה במכנה היא ${dd}, ובמונה ${nd}. משהו קל חלקי משהו שהולך ונהיה כבד מאוד מתקרב לאפס. לכן אנחנו הולכים לאדמה.`; ans='y = 0';} else {scene.classList.add('equal'); const val=dc===0?'לא מוגדר':+(nc/dc).toFixed(3); text=`המשקלים זהים: בשני הצדדים החזקה הגבוהה היא ${nd}. עכשיו לא החזקות מכריעות, אלא השופט — המקדמים. לכן בודקים את היחס בין המקדם המוביל במונה למקדם המוביל במכנה:<div class="coef-calc">${nc} ÷ ${dc} = ${val}</div>`; ans=dc===0?'לא מוגדר':`y = ${val}`;} explanation.innerHTML=text; answer.textContent=ans;}
 function loadExample(s){funcInput.value=s;parseAndUpdate()} function randomFunction(){const cases=['ground','equal','sky']; const c=cases[Math.floor(Math.random()*cases.length)]; let nd,dd;if(c==='ground'){nd=Math.floor(Math.random()*3);dd=nd+1+Math.floor(Math.random()*3)}else if(c==='sky'){dd=Math.floor(Math.random()*3);nd=dd+1+Math.floor(Math.random()*3)}else{nd=dd=1+Math.floor(Math.random()*4)} const nc=1+Math.floor(Math.random()*8), dc=1+Math.floor(Math.random()*8); const n=`${nc}x^${nd}+${Math.floor(Math.random()*9)+1}`; const d=`${dc}x^${dd}-${Math.floor(Math.random()*9)+1}`; loadExample(`(${n})/(${d})`)}
-[numDeg,denDeg,numCoef,denCoef].forEach(el=>el.addEventListener('input',update)); parseAndUpdate();
+parseAndUpdate();
 </script>
 </body>
 </html>
