@@ -646,6 +646,132 @@
 
     }
 
+  
+    /* Fundamatics brand refresh */
+    :root{
+      --fm-brand-blue:#0B4DA2;
+      --fm-brand-blue-dark:#073878;
+      --fm-brand-cream:#FFFBE7;
+      --fm-brand-gold:#FFE972;
+      --fm-brand-violet:#7247E8;
+      --fm-brand-ink:#102033;
+    }
+
+    body{
+      background:
+        radial-gradient(720px 360px at 8% 0%,rgba(255,233,114,.42),transparent 62%),
+        linear-gradient(180deg,var(--fm-brand-cream),#f5f8ff);
+      color:var(--fm-brand-ink);
+      padding:28px 20px 40px;
+    }
+
+    .wrap{max-width:1180px}
+
+    header{
+      min-height:170px;
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:28px;
+      align-items:center;
+      text-align:right;
+      color:white;
+      margin:0 0 20px;
+      padding:28px 34px;
+      border-radius:30px;
+      background:
+        radial-gradient(420px 220px at 4% 10%,rgba(255,233,114,.20),transparent 64%),
+        linear-gradient(125deg,var(--fm-brand-blue),var(--fm-brand-blue-dark));
+      box-shadow:0 22px 54px rgba(7,56,120,.22);
+    }
+
+    header::before{display:none}
+    header h1{font-size:clamp(30px,5vw,40px);line-height:1.14;margin:6px 0 10px}
+    header p{max-width:650px;margin:0;font-size:18px;line-height:1.55}
+    .hero-kicker{display:inline-block;color:var(--fm-brand-gold);font-size:14px;font-weight:900;letter-spacing:.04em}
+    .brand-lockup{direction:ltr;display:flex;align-items:center;gap:14px;min-width:280px}
+    .brand-lockup img{width:64px;height:64px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.72)}
+    .brand-lockup strong{display:block;color:#fff;font-size:22px;letter-spacing:.12em}
+    .brand-lockup span{display:block;margin-top:4px;color:var(--fm-brand-gold);font-size:17px;font-style:italic}
+
+    .panel{
+      background:rgba(255,255,255,.78);
+      border:1px solid rgba(11,77,162,.12);
+      box-shadow:0 22px 60px rgba(16,32,51,.14);
+    }
+
+    .function-box{
+      background:linear-gradient(135deg,#fff,var(--fm-brand-cream));
+      border:1px solid rgba(11,77,162,.12);
+    }
+
+    .line{background:linear-gradient(90deg,var(--fm-brand-violet),var(--fm-brand-gold),var(--fm-brand-blue))}
+    .lead-coef{background:var(--fm-brand-gold);box-shadow:none}
+
+    .learning-layout{
+      display:grid;
+      grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+      gap:16px;
+      margin-bottom:20px;
+      align-items:stretch;
+    }
+
+    .learning-layout .controls{margin:0}
+    .learning-layout .box{height:100%}
+    .box,.result-box{
+      border:1px solid rgba(11,77,162,.13);
+      box-shadow:0 10px 26px rgba(16,32,51,.06);
+    }
+
+    .rule-box h2,.result-box h2{color:var(--fm-brand-blue)}
+    .rule-box h2{margin:0 0 10px;font-size:22px}
+    .rule-card{border-top:1px solid rgba(11,77,162,.13);padding:12px 0}
+    .rule-card:first-of-type{border-top:0}
+    .rule-card strong{display:block;margin-bottom:4px}
+    .rule-card span{display:block;color:#52657a;font-size:14px;line-height:1.45}
+
+    label{display:block;font-size:17px;font-weight:800;margin-bottom:10px}
+    textarea{border-color:rgba(11,77,162,.28);background:#fff}
+    textarea:focus{outline:3px solid rgba(114,71,232,.25);border-color:var(--fm-brand-violet)}
+
+    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    button{width:100%;margin:0;background:linear-gradient(135deg,var(--fm-brand-blue),var(--fm-brand-blue-dark));box-shadow:0 9px 20px rgba(11,77,162,.20)}
+    button.secondary{background:var(--fm-brand-gold);color:var(--fm-brand-ink)}
+    button:focus-visible{outline:3px solid var(--fm-brand-gold);outline-offset:3px}
+
+    .balance-area{
+      background:
+        radial-gradient(circle at 50% 12%,rgba(255,233,114,.26),transparent 28%),
+        linear-gradient(180deg,#fff,var(--fm-brand-cream));
+      border:1px solid rgba(11,77,162,.14);
+      box-shadow:0 16px 36px rgba(16,32,51,.08);
+    }
+
+    .beam{background:linear-gradient(90deg,var(--fm-brand-violet),var(--fm-brand-blue),var(--fm-brand-gold))}
+    .answer{color:var(--fm-brand-blue)}
+    .coef-calc{background:var(--fm-brand-cream);border-color:var(--fm-brand-gold)}
+
+    @media(max-width:850px){
+      body{padding:14px 10px 28px}
+      header{min-height:0;grid-template-columns:1fr;padding:22px 20px;border-radius:24px;gap:20px}
+      header h1{font-size:30px}
+      header p{padding:0;font-size:16px}
+      .brand-lockup{min-width:0}
+      .brand-lockup img{width:54px;height:54px;border-radius:15px}
+      .brand-lockup strong{font-size:18px}
+      .learning-layout{grid-template-columns:1fr}
+    }
+
+    @media(max-width:420px){
+      header{padding:18px 16px;border-radius:20px}
+      header h1{font-size:26px}
+      .brand-lockup strong{font-size:16px;letter-spacing:.08em}
+      .brand-lockup span{font-size:15px}
+      .buttons{grid-template-columns:1fr}
+      .fraction{min-width:0;width:100%}
+      .panel{padding:12px;border-radius:22px}
+      .balance-area{min-height:300px}
+    }
+
   </style>
 
 </head>
@@ -655,15 +781,18 @@
 <div class="wrap">
 
   <header>
-
-    <h1>
-      מאזניים לאסימפטוטה אופקית
-    </h1>
-
-    <p>
-      מי כבד יותר? המונה או המכנה?
-    </p>
-
+    <div class="hero-copy">
+      <div class="hero-kicker">למידה דרך דימוי</div>
+      <h1>מאזניים לאסימפטוטה אופקית</h1>
+      <p>מי כבד יותר — המונה או המכנה? משווים דרגות ומגלים לאן הפונקציה מתקרבת.</p>
+    </div>
+    <div class="brand-lockup" aria-label="Fundamatics — Maths for life">
+      <img src="./assets/images/logo.jpeg" alt="" />
+      <div>
+        <strong>FUNDAMATICS</strong>
+        <span>Maths for life</span>
+      </div>
+    </div>
   </header>
 
   <div class="panel">
@@ -690,27 +819,36 @@
 
     </div>
 
-    <div class="controls">
+    <div class="learning-layout">
+      <div class="box rule-box">
+        <h2>איך המאזניים פועלים?</h2>
+        <div class="rule-card"><strong>המונה כבד יותר</strong><span>דרגת המונה גבוהה יותר → אין אסימפטוטה אופקית.</span></div>
+        <div class="rule-card"><strong>המכנה כבד יותר</strong><span>דרגת המכנה גבוהה יותר → הפונקציה מתקרבת ל־y = 0.</span></div>
+        <div class="rule-card"><strong>המשקלים שווים</strong><span>הדרגות שוות → מחלקים את המקדמים המובילים.</span></div>
+      </div>
 
-      <div class="box">
-
-        <textarea id="funcInput">(3x^2 + 1)/(6x^2 - 4)</textarea>
+      <div class="controls">
+        <div class="box">
+          <label for="funcInput">הכנס פונקציה רציונלית</label>
+          <textarea id="funcInput">(3x^2 + 1)/(6x^2 - 4)</textarea>
 
         <div class="hint">
           למשל:
           (2x^3+5)/(4x^2-1)
         </div>
 
-        <button onclick="parseAndUpdate()">
-          נתח פונקציה
-        </button>
+        <div class="buttons">
+          <button onclick="parseAndUpdate()">
+            נתח פונקציה
+          </button>
 
-        <button class="secondary" onclick="randomFunction()">
-          הגרל פונקציה
-        </button>
+          <button class="secondary" onclick="randomFunction()">
+            הגרל פונקציה
+          </button>
+        </div>
 
+        </div>
       </div>
-
     </div>
 
     <div class="balance-area" id="scene">
@@ -1088,3 +1226,4 @@ parseAndUpdate();
 
 </body>
 </html>
+
