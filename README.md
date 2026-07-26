@@ -9,6 +9,9 @@ of rational functions through a balance-scale visual model.
 - Automatic RTL/LTR direction switching
 - Persistent language preference
 - Responsive Fundamatics design system shared with Geometry A to Z
+- Experience-first fold layout inspired by the football asymptote activity
+- Standard mathematical display (`x` instead of `x¹`, constants instead of `x⁰`)
+- Focused highlighting of the leading powers
 - Keyboard-friendly controls and accessible status messaging
 - Polynomial validation and horizontal-asymptote analysis
 - No build step or external dependencies

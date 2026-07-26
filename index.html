@@ -264,12 +264,31 @@
 
     .polynomial { min-height: 1.4em; padding-inline: 12px; }
 
-    .leading-term {
+    .degree-focus {
       display: inline-block;
-      padding-inline: 6px;
-      background: var(--gold);
-      border-radius: 8px;
-      box-shadow: inset 0 -2px 0 rgba(16, 32, 51, .12);
+      margin-inline: .04em;
+      padding-inline: .09em;
+      color: #5f3b00;
+      background: rgba(255, 241, 168, .78);
+      border-radius: .28em;
+      box-shadow: 0 0 0 2px #f4d96b;
+      line-height: 1.08;
+    }
+
+    .degree-badge {
+      display: inline-block;
+      margin-inline-start: .6em;
+      padding: .22em .48em;
+      color: #5f3b00;
+      background: var(--brand-yellow);
+      border-radius: 999px;
+      box-shadow: 0 0 0 2px #f4d96b;
+      font-family: "Noto Sans Hebrew", "Montserrat", Arial, sans-serif;
+      font-size: .38em;
+      font-weight: 800;
+      line-height: 1.2;
+      vertical-align: middle;
+      white-space: nowrap;
     }
 
     .learning-layout {
@@ -545,6 +564,57 @@
       text-align: center;
     }
 
+    @media (min-width: 921px) {
+      .panel {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+        grid-template-areas:
+          "stage sidebar"
+          "results results";
+        gap: 16px;
+        align-items: start;
+      }
+
+      .sidebar {
+        grid-area: sidebar;
+        display: grid;
+        gap: 12px;
+      }
+
+      .function-box { margin: 0; }
+
+      .learning-layout {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 0;
+      }
+
+      .balance-area {
+        grid-area: stage;
+        height: clamp(430px, calc(100vh - 210px), 620px);
+      }
+
+      .results {
+        grid-area: results;
+        margin-block-start: 0;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .panel {
+        display: grid;
+        grid-template-areas:
+          "stage"
+          "sidebar"
+          "results";
+        gap: 12px;
+      }
+
+      .sidebar { grid-area: sidebar; }
+      .balance-area { grid-area: stage; }
+      .results { grid-area: results; margin-block-start: 0; }
+    }
+
     .footer {
       padding-block-start: 20px;
       color: var(--muted);
@@ -558,6 +628,40 @@
       .header-actions { justify-content: space-between; }
       .learning-layout, .results { grid-template-columns: 1fr; }
       .balance-area { height: 380px; }
+    }
+
+    @media (min-width: 921px) and (max-height: 850px) {
+      .wrap { margin-top: 8px; }
+      .hero { gap: 14px; margin-block-end: 10px; padding: 8px 12px; }
+      .fundamatics-brand { width: 180px; padding: 6px 12px 4px; }
+      .brand-tagline { font-size: .68rem; }
+      .brand-divider { font-size: 1.6rem; }
+      h1 { font-size: 1.35rem; }
+      .hero p { font-size: .76rem; line-height: 1.35; }
+      .fundamatics-home-link { padding: 7px 12px; font-size: .8rem; }
+      .language-switcher button { padding: 5px 8px; font-size: .76rem; }
+      .panel { gap: 10px; padding: 12px; }
+      .sidebar, .learning-layout { gap: 8px; }
+      .function-box { padding: 8px; }
+      .section-label { margin-block-end: 3px; font-size: .84rem; }
+      .fraction { gap: 3px; font-size: 1.55rem; }
+      .polynomial { padding-inline: 7px; }
+      .fraction-line { height: 3px; }
+      .card { padding: 10px; }
+      .card h2 { margin-bottom: 4px; font-size: .98rem; }
+      .rule { padding-block: 5px; }
+      .rule strong { font-size: .84rem; }
+      .rule span, .hint, .input-error { font-size: .72rem; line-height: 1.25; }
+      label { margin-block-end: 4px; font-size: .86rem; }
+      textarea { min-height: 54px; height: 54px; padding: 7px; font-size: .8rem; }
+      .buttons { gap: 7px; margin-block-start: 5px; }
+      .action { min-height: 38px; padding: 7px 9px; font-size: .8rem; }
+      .balance-area { height: calc(100vh - 142px); min-height: 390px; }
+      .result-card { min-height: 120px; padding: 10px 12px; }
+      .result-card h2 { margin-bottom: 4px; font-size: .95rem; }
+      .explanation { font-size: .82rem; }
+      .answer { min-height: 58px; font-size: 2rem; }
+      .footer { padding-block-start: 8px; font-size: .72rem; }
     }
 
     @media (max-width: 650px) {
@@ -611,42 +715,44 @@
     </header>
 
     <main id="main" class="panel">
-      <section class="function-box" aria-labelledby="function-title">
-        <div class="section-label" id="function-title" data-i18n="functionTitle">הפונקציה הרציונלית</div>
-        <div class="fraction" aria-live="polite">
-          <div class="polynomial" id="numView">3x² + 1</div>
-          <div class="fraction-line" aria-hidden="true"></div>
-          <div class="polynomial" id="denView">6x² − 4</div>
+      <div class="sidebar">
+        <section class="function-box" aria-labelledby="function-title">
+          <div class="section-label" id="function-title" data-i18n="functionTitle">הפונקציה הרציונלית</div>
+          <div class="fraction" aria-live="polite">
+            <div class="polynomial" id="numView">3x² + 1</div>
+            <div class="fraction-line" aria-hidden="true"></div>
+            <div class="polynomial" id="denView">6x² − 4</div>
+          </div>
+        </section>
+
+        <div class="learning-layout">
+          <section class="card" aria-labelledby="rules-title">
+            <h2 id="rules-title" data-i18n="rulesTitle">איך המאזניים פועלים?</h2>
+            <div class="rule">
+              <strong data-i18n="ruleNumeratorTitle">המונה כבד יותר</strong>
+              <span data-i18n="ruleNumeratorText">דרגת המונה גבוהה יותר ← אין אסימפטוטה אופקית.</span>
+            </div>
+            <div class="rule">
+              <strong data-i18n="ruleDenominatorTitle">המכנה כבד יותר</strong>
+              <span data-i18n="ruleDenominatorText">דרגת המכנה גבוהה יותר ← הפונקציה מתקרבת ל־y = 0.</span>
+            </div>
+            <div class="rule">
+              <strong data-i18n="ruleEqualTitle">המשקלים שווים</strong>
+              <span data-i18n="ruleEqualText">הדרגות שוות ← מחלקים את המקדמים המובילים.</span>
+            </div>
+          </section>
+
+          <section class="card" aria-labelledby="input-label">
+            <label id="input-label" for="funcInput" data-i18n="inputLabel">הכניסו פונקציה רציונלית</label>
+            <textarea id="funcInput" aria-describedby="input-hint input-error" spellcheck="false">(3x^2 + 1)/(6x^2 - 4)</textarea>
+            <div class="hint" id="input-hint"><span data-i18n="example">למשל:</span> <bdi>(2x^3+5)/(4x^2-1)</bdi></div>
+            <div class="input-error" id="input-error" role="alert"></div>
+            <div class="buttons">
+              <button class="action" id="analyzeButton" type="button" data-i18n="analyze">נתחו פונקציה</button>
+              <button class="action secondary" id="randomButton" type="button" data-i18n="random">הגרילו פונקציה</button>
+            </div>
+          </section>
         </div>
-      </section>
-
-      <div class="learning-layout">
-        <section class="card" aria-labelledby="rules-title">
-          <h2 id="rules-title" data-i18n="rulesTitle">איך המאזניים פועלים?</h2>
-          <div class="rule">
-            <strong data-i18n="ruleNumeratorTitle">המונה כבד יותר</strong>
-            <span data-i18n="ruleNumeratorText">דרגת המונה גבוהה יותר ← אין אסימפטוטה אופקית.</span>
-          </div>
-          <div class="rule">
-            <strong data-i18n="ruleDenominatorTitle">המכנה כבד יותר</strong>
-            <span data-i18n="ruleDenominatorText">דרגת המכנה גבוהה יותר ← הפונקציה מתקרבת ל־y = 0.</span>
-          </div>
-          <div class="rule">
-            <strong data-i18n="ruleEqualTitle">המשקלים שווים</strong>
-            <span data-i18n="ruleEqualText">הדרגות שוות ← מחלקים את המקדמים המובילים.</span>
-          </div>
-        </section>
-
-        <section class="card" aria-labelledby="input-label">
-          <label id="input-label" for="funcInput" data-i18n="inputLabel">הכניסו פונקציה רציונלית</label>
-          <textarea id="funcInput" aria-describedby="input-hint input-error" spellcheck="false">(3x^2 + 1)/(6x^2 - 4)</textarea>
-          <div class="hint" id="input-hint"><span data-i18n="example">למשל:</span> <bdi>(2x^3+5)/(4x^2-1)</bdi></div>
-          <div class="input-error" id="input-error" role="alert"></div>
-          <div class="buttons">
-            <button class="action" id="analyzeButton" type="button" data-i18n="analyze">נתחו פונקציה</button>
-            <button class="action secondary" id="randomButton" type="button" data-i18n="random">הגרילו פונקציה</button>
-          </div>
-        </section>
       </div>
 
       <section class="balance-area" id="scene" aria-label="הדמיית מאזניים" data-i18n-aria-label="sceneLabel">
@@ -716,7 +822,9 @@
         denominatorHeavy: "דרגת המכנה גבוהה מדרגת המונה. המונה נעשה זניח ביחס למכנה, ולכן המנה מתקרבת ל־0.",
         equalHeavy: "הדרגות שוות, ולכן האסימפטוטה נקבעת לפי היחס בין המקדמים המובילים.",
         none: "אין",
-        degreeSummary: "דרגת המונה: {n} · דרגת המכנה: {d}"
+        degreeSummary: "דרגת המונה: {n} · דרגת המכנה: {d}",
+        powerAria: "חזקה מובילה {degree}",
+        degreeBadge: "חזקה {degree}"
       },
       en: {
         documentTitle: "Fundamatics — Horizontal Asymptote Balance",
@@ -754,7 +862,9 @@
         denominatorHeavy: "The denominator's degree is higher. The numerator becomes negligible by comparison, so the quotient approaches 0.",
         equalHeavy: "The degrees are equal, so the asymptote is the ratio of the leading coefficients.",
         none: "None",
-        degreeSummary: "Numerator degree: {n} · Denominator degree: {d}"
+        degreeSummary: "Numerator degree: {n} · Denominator degree: {d}",
+        powerAria: "Leading power {degree}",
+        degreeBadge: "power {degree}"
       }
     };
 
@@ -848,7 +958,7 @@
       return [unwrap(input.slice(0, slashIndex)), unwrap(input.slice(slashIndex + 1))];
     }
 
-    function parsePolynomial(source) {
+    function polynomialCoefficients(source) {
       let polynomial = normalize(source).replace(/\*/g, "");
       if (!polynomial || /[^0-9xX.+\-^]/.test(polynomial)) throw new Error("errorPolynomial");
       polynomial = polynomial.replace(/X/g, "x");
@@ -879,6 +989,11 @@
         coefficients.set(degree, (coefficients.get(degree) || 0) + sign * coefficient);
       });
 
+      return coefficients;
+    }
+
+    function parsePolynomial(source) {
+      const coefficients = polynomialCoefficients(source);
       const nonZero = [...coefficients.entries()].filter(([, coefficient]) => Math.abs(coefficient) > 1e-12);
       if (nonZero.length === 0) return { degree: -Infinity, coefficient: 0 };
       const degree = Math.max(...nonZero.map(([power]) => power));
@@ -889,24 +1004,61 @@
       return value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
     }
 
-    function prettyPolynomial(source) {
-      return normalize(source)
-        .replace(/\*/g, "")
-        .replace(/\^(\d+)/g, (_, degree) => superscript(degree))
-        .replace(/\+/g, " + ")
-        .replace(/-/g, " − ")
-        .replace(/^\s+/, "");
+    function polynomialEntries(source) {
+      return [...polynomialCoefficients(source).entries()]
+        .filter(([, coefficient]) => Math.abs(coefficient) > 1e-12)
+        .sort(([degreeA], [degreeB]) => degreeB - degreeA);
+    }
+
+    function canonicalPolynomial(source, style = "display") {
+      const entries = polynomialEntries(source);
+      if (entries.length === 0) return "0";
+
+      return entries.map(([degree, coefficient], index) => {
+        const negative = coefficient < 0;
+        const absolute = Math.abs(coefficient);
+        const coefficientText = degree > 0 && absolute === 1 ? "" : formatNumber(absolute);
+        const variable = degree === 0
+          ? ""
+          : degree === 1
+            ? "x"
+            : `x${style === "ascii" ? `^${degree}` : superscript(degree)}`;
+        const sign = index === 0
+          ? negative ? style === "ascii" ? "-" : "−" : ""
+          : negative ? style === "ascii" ? " - " : " − " : " + ";
+        return `${sign}${coefficientText}${variable}`;
+      }).join("");
     }
 
     function highlightedPolynomial(source, leading) {
-      const pretty = prettyPolynomial(source);
-      const coefficient = leading.coefficient;
-      const coefficientText = coefficient === 1 ? "" : coefficient === -1 ? "−" : String(coefficient).replace("-", "−");
-      const term = leading.degree === 0 ? String(coefficient).replace("-", "−") : `${coefficientText}${powerLabel(leading.degree)}`;
-      const safePretty = escapeHtml(pretty);
-      const displayedTerm = term.startsWith("−") ? term.replace("−", "− ") : term;
-      const safeTerm = escapeHtml(displayedTerm);
-      return safePretty.replace(safeTerm, `<span class="leading-term">${safeTerm}</span>`);
+      const entries = polynomialEntries(source);
+      if (entries.length === 0) return "0";
+
+      return entries.map(([degree, coefficient], index) => {
+        const negative = coefficient < 0;
+        const absolute = Math.abs(coefficient);
+        const coefficientText = degree > 0 && absolute === 1 ? "" : formatNumber(absolute);
+        const sign = index === 0 ? negative ? "−" : "" : negative ? " − " : " + ";
+        const isLeading = degree === leading.degree;
+        const aria = escapeHtml(t("powerAria").replace("{degree}", degree));
+        let variable = "";
+
+        if (degree === 1) {
+          variable = isLeading
+            ? `<span class="degree-focus" aria-label="${aria}">x</span>`
+            : "x";
+        } else if (degree > 1) {
+          const exponent = superscript(degree);
+          variable = isLeading
+            ? `x<span class="degree-focus" aria-label="${aria}">${exponent}</span>`
+            : `x${exponent}`;
+        }
+
+        const badge = isLeading && degree === 0
+          ? `<span class="degree-badge">${escapeHtml(t("degreeBadge").replace("{degree}", degree))}</span>`
+          : "";
+        return `${sign}${coefficientText}${variable}${badge}`;
+      }).join("");
     }
 
     function formatNumber(value) {
@@ -922,7 +1074,15 @@
         if (denominatorLeading.degree === -Infinity) throw new Error("errorDenominator");
         if (numeratorLeading.degree === -Infinity) throw new Error("errorPolynomial");
 
-        currentAnalysis = { numerator, denominator, numeratorLeading, denominatorLeading };
+        const canonicalNumerator = canonicalPolynomial(numerator, "ascii");
+        const canonicalDenominator = canonicalPolynomial(denominator, "ascii");
+        elements.input.value = `(${canonicalNumerator})/(${canonicalDenominator})`;
+        currentAnalysis = {
+          numerator: canonicalNumerator,
+          denominator: canonicalDenominator,
+          numeratorLeading,
+          denominatorLeading
+        };
         currentErrorKey = null;
         elements.input.setAttribute("aria-invalid", "false");
         elements.error.textContent = "";
@@ -971,14 +1131,21 @@
 
     function randomFunction() {
       const type = ["sky", "ground", "equal"][Math.floor(Math.random() * 3)];
-      let numeratorDegree = Math.floor(Math.random() * 3) + 1;
-      let denominatorDegree = Math.floor(Math.random() * 3) + 1;
+      let numeratorDegree = Math.floor(Math.random() * 3);
+      let denominatorDegree = Math.floor(Math.random() * 3);
       if (type === "sky") numeratorDegree = denominatorDegree + 1;
       if (type === "ground") denominatorDegree = numeratorDegree + 1;
       if (type === "equal") denominatorDegree = numeratorDegree;
       const numeratorCoefficient = Math.floor(Math.random() * 8) + 1;
       const denominatorCoefficient = Math.floor(Math.random() * 8) + 1;
-      elements.input.value = `(${numeratorCoefficient}x^${numeratorDegree}+1)/(${denominatorCoefficient}x^${denominatorDegree}-4)`;
+      const randomPolynomial = (coefficient, degree, tail, operation) => {
+        if (degree === 0) return String(operation === "+" ? coefficient + tail : Math.max(1, coefficient - tail));
+        const leadingTerm = degree === 1 ? `${coefficient}x` : `${coefficient}x^${degree}`;
+        return `${leadingTerm}${operation}${tail}`;
+      };
+      const numerator = randomPolynomial(numeratorCoefficient, numeratorDegree, 1, "+");
+      const denominator = randomPolynomial(denominatorCoefficient, denominatorDegree, 1, "+");
+      elements.input.value = `(${numerator})/(${denominator})`;
       analyze();
     }
 
