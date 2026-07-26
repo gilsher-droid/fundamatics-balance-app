@@ -1,1229 +1,1004 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Fundamatics — Horizontal Asymptote Balance</title>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b4da2">
+  <meta name="description" content="An interactive Fundamatics tool for understanding horizontal asymptotes.">
+  <title>Fundamatics — מאזניים לאסימפטוטה אופקית</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700&amp;family=Montserrat:wght@600;700;800&amp;family=Noto+Sans+Hebrew:wght@400;600;700;800&amp;display=swap">
   <style>
-
-    :root{
-      --fm-blue:#4D9DFF;
-      --fm-blue-deep:#2F7EEA;
-      --fm-violet:#7F5CFF;
-      --fm-pink:#FF5DAA;
-      --fm-yellow:#FFD35A;
-      --fm-orange:#FF9F43;
-      --fm-green:#49D17D;
-      --fm-ink:#102033;
-      --fm-card:rgba(255,255,255,.95);
+    :root {
+      color-scheme: light;
+      --background: #f7f8fb;
+      --surface: #ffffff;
+      --surface-soft: #f1f5fb;
+      --brand-cream: #fffde1;
+      --brand-yellow: #fff1a8;
+      --brand-purple: #6e56cf;
+      --brand-purple-dark: #5842b8;
+      --brand-red: #c94b54;
+      --text: #23262b;
+      --muted: #5f6b7a;
+      --primary: #0b3a8a;
+      --primary-light: #245cb1;
+      --border: #d5deeb;
+      --success: #15803d;
+      --danger: #b42318;
+      --shadow: 0 16px 36px rgba(11, 58, 138, .1);
+      --brand-shadow: 0 7px 0 var(--primary);
+      --blue: var(--primary);
+      --blue-dark: #073878;
+      --blue-soft: var(--surface-soft);
+      --cream: var(--brand-cream);
+      --gold: var(--brand-yellow);
+      --violet: var(--brand-purple);
+      --ink: var(--text);
+      --line: var(--border);
+      --white: var(--surface);
     }
 
-    *{
-      box-sizing:border-box;
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      min-height: 100vh;
+      color: var(--text);
+      background: var(--background);
+      font-family: "Noto Sans Hebrew", "Montserrat", Arial, sans-serif;
+      line-height: 1.6;
     }
 
-    body{
-      margin:0;
-      min-height:100vh;
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+    html[lang="en"] body { font-family: "Montserrat", "Manrope", Arial, sans-serif; }
+    button, textarea { font: inherit; }
+    button, .fundamatics-home-link { font-family: "Manrope", "Noto Sans Hebrew", Arial, sans-serif; }
+    button { -webkit-tap-highlight-color: transparent; }
 
+    .skip-link {
+      position: fixed;
+      inset-block-start: 10px;
+      inset-inline-start: 10px;
+      z-index: 100;
+      padding: 10px 14px;
+      color: var(--white);
+      background: var(--primary);
+      border-radius: 10px;
+      transform: translateY(-160%);
+      transition: transform .2s;
+    }
+
+    .skip-link:focus { transform: translateY(0); }
+
+    .wrap {
+      width: min(1160px, calc(100% - 32px));
+      margin: 22px auto 36px;
+    }
+
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-block-end: 30px;
+      padding: 16px 18px;
+      color: var(--text);
+      background: var(--brand-cream);
+      border: 2px solid var(--primary);
+      border-radius: 22px;
+      box-shadow: var(--brand-shadow), var(--shadow);
+    }
+
+    .brand-product-lockup {
+      display: flex;
+      flex: 1 1 560px;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .fundamatics-brand {
+      direction: ltr;
+      display: flex;
+      width: min(230px, 42vw);
+      flex: 0 0 auto;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 10px 18px 7px;
+      background: var(--primary);
+      border-radius: 999px;
+      color: white;
+      text-decoration: none;
+    }
+
+    .fundamatics-brand img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .brand-tagline {
+      color: var(--brand-yellow);
+      font-family: cursive;
+      font-size: .92rem;
+      font-style: italic;
+      line-height: 1.15;
+    }
+
+    .brand-divider {
+      color: var(--primary);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    .product-identity { min-width: 0; }
+
+    h1 {
+      margin: 0 0 2px;
+      color: var(--primary);
+      font-family: "Montserrat", Arial, sans-serif;
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .header-actions {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .language-switcher {
+      direction: ltr;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .language-switcher button {
+      width: auto;
+      min-width: 0;
+      padding: 7px 11px;
+      color: var(--primary);
+      background: transparent;
+      border: 0;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: .88rem;
+      font-weight: 700;
+    }
+
+    .language-switcher button[aria-pressed="true"] {
+      color: white;
+      background: var(--primary);
+      box-shadow: none;
+    }
+
+    .language-switcher button:hover {
+      color: var(--primary);
+      background: var(--surface-soft);
+      transform: none;
+    }
+
+    .language-switcher button[aria-pressed="true"]:hover {
+      color: white;
+      background: var(--primary);
+    }
+
+    .fundamatics-home-link {
+      flex: 0 0 auto;
+      padding: 10px 18px;
+      color: var(--brand-purple-dark);
+      border: 2px solid var(--brand-purple);
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: background .15s ease, color .15s ease, transform .15s ease;
+    }
+
+    .fundamatics-home-link:hover {
+      color: white;
+      background: var(--brand-purple);
+      transform: translateY(-2px);
+    }
+
+    .panel {
+      padding: 30px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      box-shadow: var(--shadow);
+    }
+
+    .function-box {
+      margin-block-end: 18px;
+      padding: 18px;
+      text-align: center;
+      background: var(--brand-cream);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+    }
+
+    .section-label {
+      margin-block-end: 12px;
+      color: var(--blue);
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .fraction {
+      direction: ltr;
+      width: min(420px, 100%);
+      display: inline-grid;
+      grid-template-rows: auto 4px auto;
+      gap: 7px;
+      align-items: center;
+      font-family: "Cambria Math", Georgia, serif;
+      font-size: clamp(1.65rem, 5vw, 2.35rem);
+      font-weight: 700;
+    }
+
+    .fraction-line {
+      height: 4px;
+      background: linear-gradient(90deg, var(--violet), var(--gold), var(--blue));
+      border-radius: 999px;
+    }
+
+    .polynomial { min-height: 1.4em; padding-inline: 12px; }
+
+    .leading-term {
+      display: inline-block;
+      padding-inline: 6px;
+      background: var(--gold);
+      border-radius: 8px;
+      box-shadow: inset 0 -2px 0 rgba(16, 32, 51, .12);
+    }
+
+    .learning-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+      gap: 16px;
+      align-items: stretch;
+      margin-block-end: 20px;
+    }
+
+    .card {
+      height: 100%;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+    }
+
+    .card h2 {
+      margin: 0 0 10px;
+      color: var(--blue);
+      font-size: 1.28rem;
+    }
+
+    .rule {
+      padding-block: 11px;
+      border-block-start: 1px solid var(--line);
+    }
+
+    .rule:first-of-type { border-block-start: 0; }
+    .rule strong { display: block; margin-block-end: 3px; }
+    .rule span { color: var(--muted); font-size: .91rem; }
+
+    label {
+      display: block;
+      margin-block-end: 9px;
+      font-size: 1.02rem;
+      font-weight: 850;
+    }
+
+    textarea {
+      direction: ltr;
+      width: 100%;
+      min-height: 92px;
+      padding: 14px;
+      resize: vertical;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid #b7c4d6;
+      border-radius: 15px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 1rem;
+    }
+
+    textarea:focus {
+      outline: 3px solid rgba(114, 71, 232, .22);
+      border-color: var(--violet);
+    }
+
+    textarea[aria-invalid="true"] { border-color: var(--danger); }
+
+    .hint, .input-error {
+      margin-block-start: 8px;
+      font-size: .88rem;
+    }
+
+    .hint { color: var(--muted); }
+    .input-error { min-height: 1.4em; color: var(--danger); font-weight: 700; }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-block-start: 10px;
+    }
+
+    .action {
+      min-height: 48px;
+      padding: 12px 22px;
+      color: var(--white);
+      background: var(--brand-purple);
+      border: 2px solid transparent;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .action.secondary {
+      color: var(--brand-purple-dark);
+      background: var(--brand-cream);
+      border-color: var(--brand-purple);
+    }
+    .action:hover { background: var(--brand-purple-dark); transform: translateY(-2px); }
+    .action.secondary:hover { color: white; background: var(--brand-purple); }
+    .action:active { transform: translateY(0); }
+
+    :focus-visible {
+      outline: 3px solid rgba(110, 86, 207, .35);
+      outline-offset: 3px;
+    }
+
+    .balance-area {
+      position: relative;
+      height: min(420px, 70vw);
+      min-height: 330px;
+      overflow: hidden;
       background:
-        radial-gradient(circle at 82% 8%, rgba(255,255,255,.24), transparent 30%),
-        radial-gradient(circle at 12% 0%, rgba(255,211,90,.18), transparent 25%),
-        linear-gradient(135deg,var(--fm-blue),var(--fm-blue-deep),var(--fm-violet));
-
-      color:var(--fm-ink);
-
-      padding:16px;
-    }
-
-    .wrap{
-      max-width:1200px;
-      margin:auto;
-    }
-
-    header{
-      text-align:center;
-      color:white;
-      margin-bottom:22px;
-    }
-
-    header::before{
-
-      content:'';
-
-      display:block;
-
-      width:92px;
-      height:92px;
-
-      margin:0 auto 14px;
-
-      background-image:url('./assets/images/logo.jpeg');
-      background-position:center;
-      background-size:cover;
-      background-repeat:no-repeat;
-
-      border-radius:26px;
-
-      background-color:white;
-
-      border:3px solid rgba(255,255,255,.72);
-
-      box-shadow:
-        0 16px 34px rgba(16,32,51,.24);
-
-    }
-
-    header h1{
-      margin:0;
-      font-size:clamp(28px,6vw,40px);
-    }
-
-    header p{
-      margin-top:10px;
-      font-size:clamp(16px,3vw,20px);
-      opacity:.95;
-    }
-
-    .panel{
-
-      background:var(--fm-card);
-
-      border-radius:32px;
-
-      padding:22px;
-
-      backdrop-filter:blur(10px);
-
-      box-shadow:
-        0 24px 70px rgba(16,32,51,.25);
-
-      border:1px solid rgba(255,255,255,.6);
-    }
-
-    .function-box{
-
-      background:linear-gradient(135deg,#ffffff,#eef6ff);
-
-      border-radius:26px;
-
-      padding:18px;
-
-      margin-bottom:20px;
-
-      text-align:center;
-
-      border:2px solid rgba(255,255,255,.75);
-    }
-
-    .function-title{
-      font-size:20px;
-      font-weight:700;
-      margin-bottom:14px;
-    }
-
-    .fraction{
-
-      display:inline-grid;
-
-      grid-template-rows:auto 4px auto;
-
-      gap:8px;
-
-      direction:ltr;
-
-      align-items:center;
-
-      font-size:clamp(24px,5vw,36px);
-
-      font-weight:bold;
-
-      min-width:min(360px,90vw);
-
-    }
-
-    .line{
-      height:4px;
-      border-radius:999px;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--fm-pink),
-          var(--fm-yellow),
-          var(--fm-blue)
-        );
-    }
-
-    .poly{
-      padding:0 12px;
-    }
-
-    .lead-coef{
-
-      display:inline-block;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--fm-yellow),
-          var(--fm-orange)
-        );
-
-      padding:2px 8px;
-
-      border-radius:12px;
-
-      color:var(--fm-ink);
-
-      box-shadow:
-        0 6px 16px rgba(16,32,51,.18);
-
-      transform:scale(1.05);
-
-    }
-
-    .controls{
-      margin-bottom:20px;
-    }
-
-    .box{
-
-      background:white;
-
-      border-radius:24px;
-
-      padding:18px;
-
-      border:2px solid #e8eef8;
-    }
-
-    textarea{
-
-      width:100%;
-
-      height:90px;
-
-      border-radius:16px;
-
-      border:1px solid #d0d8e6;
-
-      padding:14px;
-
-      resize:vertical;
-
-      font-size:16px;
-
-      direction:ltr;
-
-      font-family:monospace;
-    }
-
-    .hint{
-      margin-top:10px;
-      color:#60758f;
-      line-height:1.5;
-      font-size:14px;
-    }
-
-    button{
-
-      border:none;
-
-      border-radius:16px;
-
-      padding:13px 18px;
-
-      cursor:pointer;
-
-      color:white;
-
-      font-weight:700;
-
-      margin-top:12px;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--fm-violet),
-          var(--fm-blue-deep)
-        );
-
-      box-shadow:
-        0 10px 24px rgba(47,126,234,.22);
-    }
-
-    button.secondary{
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--fm-pink),
-          var(--fm-orange)
-        );
-    }
-
-    .balance-area{
-
-      position:relative;
-
-      height:min(420px,82vw);
-
-      min-height:320px;
-
-      border-radius:30px;
-
-      overflow:hidden;
-
-      margin-top:22px;
-
-      background:
-        radial-gradient(circle at 50% 12%, rgba(255,211,90,.20), transparent 25%),
-        linear-gradient(#f9fcff,#eef5ff);
-
-      border:1px solid #dce8f8;
-    }
-
-    .sky,
-    .ground{
-
-      position:absolute;
-
-      left:0;
-      right:0;
-
-      text-align:center;
-
-      font-weight:bold;
-
-      opacity:0;
-
-      transition:.5s;
-
-      z-index:10;
-
-      pointer-events:none;
-
-      padding:0 12px;
-    }
-
-    .sky{
-      top:16px;
-      color:#2F7EEA;
-      font-size:clamp(16px,4vw,24px);
-    }
-
-    .ground{
-      bottom:14px;
-      color:#56703b;
-      font-size:clamp(16px,4vw,22px);
-    }
-
-    .go-sky .sky{
-      opacity:1;
-    }
-
-    .go-ground .ground{
-      opacity:1;
-    }
-
-    .beam{
-
-      position:absolute;
-
-      width:min(560px,82vw);
-
-      height:clamp(8px,1.8vw,14px);
-
-      left:50%;
-      top:45%;
-
-      transform:translateX(-50%);
-
-      transform-origin:center;
-
-      border-radius:999px;
-
-      transition:1s;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--fm-violet),
-          var(--fm-blue-deep),
-          var(--fm-pink)
-        );
-    }
-
-    .pivot{
-
-      position:absolute;
-
-      left:50%;
-      top:48%;
-
-      transform:translateX(-50%);
-
-      width:0;
-      height:0;
-
-      border-left:clamp(24px,5vw,42px) solid transparent;
-      border-right:clamp(24px,5vw,42px) solid transparent;
-
-      border-bottom:clamp(70px,16vw,125px) solid var(--fm-ink);
-    }
-
-    .pan{
-
-      position:absolute;
-
-      width:min(190px,34vw);
-
-      height:clamp(10px,2vw,18px);
-
-      background:var(--fm-ink);
-
-      border-radius:50%;
-
-      transition:1s;
-    }
-
-    .pan.left{
-      left:clamp(54px,19vw,215px);
-      top:57%;
-    }
-
-    .pan.right{
-      right:clamp(54px,19vw,215px);
-      top:57%;
-    }
-
-    .weight{
-
-      position:absolute;
-
-      width:clamp(76px,18vw,118px);
-
-      height:clamp(56px,13vw,82px);
-
-      border-radius:22px;
-
-      display:flex;
-
-      align-items:center;
-      justify-content:center;
-
-      font-size:clamp(22px,5vw,32px);
-
-      font-weight:bold;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--fm-yellow),
-          var(--fm-orange)
-        );
-
-      box-shadow:
-        0 10px 24px rgba(0,0,0,.18);
-
-      transition:1s;
-
-      z-index:5;
-    }
-
-    .weight.left{
-      left:clamp(96px,22vw,251px);
-      top:62%;
-    }
-
-    .weight.right{
-      right:clamp(96px,22vw,251px);
-      top:62%;
-    }
-
-    .rocket,
-    .seed,
-    .judge{
-
-      position:absolute;
-
-      opacity:0;
-
-      transition:1s;
-
-      z-index:20;
-    }
-
-    .rocket{
-
-      left:10%;
-
-      bottom:-120px;
-
-      font-size:clamp(42px,10vw,76px);
-    }
-
-    .seed{
-
-      right:10%;
-
-      top:-120px;
-
-      font-size:clamp(42px,10vw,76px);
-    }
-
-    .judge{
-
-      left:50%;
-      top:8%;
-
-      transform:translateX(-50%) scale(.4);
-
-      font-size:clamp(48px,12vw,86px);
-
-      text-align:center;
-    }
-
-    .judge small{
-
-      display:block;
-
-      margin-top:6px;
-
-      background:white;
-
-      padding:6px 12px;
-
-      border-radius:999px;
-
-      font-size:14px;
-
-      box-shadow:
-        0 4px 14px rgba(0,0,0,.15);
-    }
-
-    .go-sky .rocket{
-      opacity:1;
-      bottom:58%;
-    }
-
-    .go-ground .seed{
-      opacity:1;
-      top:58%;
-    }
-
-    .equal .judge{
-      opacity:1;
-      transform:translateX(-50%) scale(1);
-    }
-
-    .go-sky .beam{
-      transform:translateX(-50%) rotate(-12deg);
-    }
-
-    .go-ground .beam{
-      transform:translateX(-50%) rotate(12deg);
-    }
-
-    .go-sky .weight.left{
-      top:72%;
-    }
-
-    .go-sky .weight.right{
-      top:50%;
-    }
-
-    .go-ground .weight.left{
-      top:50%;
-    }
-
-    .go-ground .weight.right{
-      top:72%;
+        linear-gradient(rgba(11, 58, 138, .05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11, 58, 138, .05) 1px, transparent 1px),
+        #fffef3;
+      background-size: 24px 24px;
+      border: 2px dashed #8aa1c2;
+      border-radius: 20px;
+    }
+
+    .scene-message {
+      position: absolute;
+      inset-inline: 12px;
+      z-index: 10;
+      padding: 7px 12px;
+      text-align: center;
+      font-size: clamp(1rem, 3vw, 1.35rem);
+      font-weight: 850;
+      opacity: 0;
+      transition: opacity .45s;
+      pointer-events: none;
+    }
+
+    .scene-message.sky { inset-block-start: 14px; color: var(--blue); }
+    .scene-message.ground { inset-block-end: 12px; color: var(--success); }
+    .go-sky .scene-message.sky, .go-ground .scene-message.ground { opacity: 1; }
+
+    .beam {
+      position: absolute;
+      inset-inline-start: 50%;
+      inset-block-start: 45%;
+      width: min(560px, 78vw);
+      height: clamp(9px, 1.8vw, 14px);
+      background: linear-gradient(90deg, var(--violet), var(--blue), var(--gold));
+      border-radius: 999px;
+      transform: translateX(-50%);
+      transform-origin: center;
+      transition: transform .9s ease;
+    }
+
+    .pivot {
+      position: absolute;
+      inset-inline-start: 50%;
+      inset-block-start: 48%;
+      width: 0;
+      height: 0;
+      border-inline: clamp(25px, 5vw, 42px) solid transparent;
+      border-block-end: clamp(72px, 14vw, 120px) solid var(--ink);
+      transform: translateX(-50%);
+    }
+
+    .pan {
+      position: absolute;
+      inset-block-start: 57%;
+      width: min(190px, 31vw);
+      height: clamp(11px, 2vw, 17px);
+      background: var(--ink);
+      border-radius: 50%;
+      transition: inset-block-start .9s ease;
+    }
+
+    .pan.left { left: clamp(48px, 18vw, 210px); }
+    .pan.right { right: clamp(48px, 18vw, 210px); }
+
+    .weight {
+      position: absolute;
+      inset-block-start: 62%;
+      z-index: 5;
+      width: clamp(74px, 17vw, 116px);
+      height: clamp(56px, 12vw, 80px);
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      background: var(--brand-yellow);
+      border: 2px solid var(--primary);
+      border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .15);
+      font-family: "Cambria Math", Georgia, serif;
+      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-weight: 800;
+      transition: inset-block-start .9s ease;
+    }
+
+    .weight.left { left: clamp(86px, 21vw, 248px); }
+    .weight.right { right: clamp(86px, 21vw, 248px); }
+
+    .scene-icon {
+      position: absolute;
+      z-index: 20;
+      font-size: clamp(2.7rem, 9vw, 4.7rem);
+      opacity: 0;
+      transition: .9s ease;
+    }
+
+    .rocket { left: 9%; bottom: -110px; }
+    .seed { right: 9%; top: -110px; }
+    .judge {
+      inset-inline-start: 50%;
+      inset-block-start: 7%;
+      text-align: center;
+      transform: translateX(-50%) scale(.5);
+    }
+
+    .judge small {
+      display: block;
+      margin-block-start: 2px;
+      padding: 5px 10px;
+      color: var(--ink);
+      background: var(--white);
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, .14);
+      font-family: "Noto Sans Hebrew", "Montserrat", Arial, sans-serif;
+      font-size: .78rem;
+      white-space: nowrap;
+    }
+
+    .go-sky .rocket { bottom: 57%; opacity: 1; }
+    .go-ground .seed { top: 57%; opacity: 1; }
+    .equal .judge { opacity: 1; transform: translateX(-50%) scale(1); }
+    .go-sky .beam { transform: translateX(-50%) rotate(-12deg); }
+    .go-ground .beam { transform: translateX(-50%) rotate(12deg); }
+    .go-sky .weight.left, .go-sky .pan.left { inset-block-start: 70%; }
+    .go-sky .weight.right, .go-sky .pan.right { inset-block-start: 50%; }
+    .go-ground .weight.left, .go-ground .pan.left { inset-block-start: 50%; }
+    .go-ground .weight.right, .go-ground .pan.right { inset-block-start: 70%; }
+
+    .results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-block-start: 20px;
+    }
+
+    .result-card {
+      min-height: 160px;
+      padding: 20px;
+      background: var(--surface-soft);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+    }
+
+    .result-card h2 { margin: 0 0 12px; color: var(--blue); font-size: 1.25rem; }
+    .explanation { color: var(--muted); }
+
+    .calculation {
+      direction: ltr;
+      margin-block-start: 14px;
+      padding: 12px;
+      text-align: center;
+      color: var(--ink);
+      background: var(--cream);
+      border: 2px solid var(--gold);
+      border-radius: 15px;
+      font-size: clamp(1.2rem, 4vw, 1.65rem);
+      font-weight: 850;
+    }
+
+    .answer {
+      direction: ltr;
+      display: grid;
+      min-height: 86px;
+      place-items: center;
+      color: var(--blue);
+      font-family: "Cambria Math", Georgia, serif;
+      font-size: clamp(2.2rem, 7vw, 3.4rem);
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .footer {
+      padding-block-start: 20px;
+      color: var(--muted);
+      font-size: .86rem;
+      text-align: center;
+    }
+
+    @media (max-width: 850px) {
+      .hero { align-items: stretch; flex-direction: column; }
+      .brand-product-lockup { flex-basis: auto; }
+      .header-actions { justify-content: space-between; }
+      .learning-layout, .results { grid-template-columns: 1fr; }
+      .balance-area { height: 380px; }
+    }
+
+    @media (max-width: 650px) {
+      .wrap { width: min(100% - 16px, 1160px); margin: 10px auto 24px; }
+      .hero { align-items: stretch; flex-direction: column; gap: 14px; padding: 16px; border-radius: 18px; }
+      .brand-product-lockup { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .fundamatics-brand { width: min(220px, 100%); }
+      .brand-divider { display: none; }
+      .header-actions { align-items: stretch; flex-direction: column; }
+      .language-switcher { align-self: flex-start; }
+      .fundamatics-home-link { align-self: stretch; text-align: center; }
+      .panel { padding: 20px; border-radius: 18px; }
+      .buttons { grid-template-columns: 1fr; }
+      .card, .result-card { padding: 16px; }
+      .balance-area { min-height: 300px; height: 330px; }
+      .weight.left { left: clamp(55px, 20vw, 95px); }
+      .weight.right { right: clamp(55px, 20vw, 95px); }
+      .pan.left { left: clamp(22px, 12vw, 55px); }
+      .pan.right { right: clamp(22px, 12vw, 55px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
-
-    .result{
-
-      display:grid;
-
-      grid-template-columns:1fr 1fr;
-
-      gap:18px;
-
-      margin-top:22px;
-    }
-
-    .result-box{
-
-      background:white;
-
-      border-radius:24px;
-
-      padding:18px;
-
-      border:2px solid #e8eef8;
-    }
-
-    .result-box h2{
-      margin-top:0;
-    }
-
-    .answer{
-
-      font-size:clamp(34px,7vw,52px);
-
-      font-weight:bold;
-
-      text-align:center;
-
-      color:var(--fm-blue-deep);
-
-      margin-top:20px;
-    }
-
-    .coef-calc{
-
-      margin-top:14px;
-
-      padding:14px;
-
-      border-radius:18px;
-
-      text-align:center;
-
-      font-size:clamp(20px,5vw,28px);
-
-      font-weight:800;
-
-      direction:ltr;
-
-      background:
-        linear-gradient(
-          135deg,
-          #fff6d3,
-          #eef6ff
-        );
-
-      border:2px solid #ffe08a;
-    }
-
-    .tag{
-
-      display:inline-block;
-
-      margin:4px;
-
-      padding:8px 12px;
-
-      border-radius:999px;
-
-      background:rgba(255,255,255,.8);
-
-      border:1px solid #d6e6ff;
-
-      font-size:14px;
-    }
-
-    @media(max-width:850px){
-
-      body{
-        padding:10px;
-      }
-
-      .panel{
-        padding:16px;
-      }
-
-      .result{
-        grid-template-columns:1fr;
-      }
-
-      .balance-area{
-        height:380px;
-      }
-
-    }
-
-  
-    /* Fundamatics brand refresh */
-    :root{
-      --fm-brand-blue:#0B4DA2;
-      --fm-brand-blue-dark:#073878;
-      --fm-brand-cream:#FFFBE7;
-      --fm-brand-gold:#FFE972;
-      --fm-brand-violet:#7247E8;
-      --fm-brand-ink:#102033;
-    }
-
-    body{
-      background:
-        radial-gradient(720px 360px at 8% 0%,rgba(255,233,114,.42),transparent 62%),
-        linear-gradient(180deg,var(--fm-brand-cream),#f5f8ff);
-      color:var(--fm-brand-ink);
-      padding:28px 20px 40px;
-    }
-
-    .wrap{max-width:1180px}
-
-    header{
-      min-height:170px;
-      display:grid;
-      grid-template-columns:minmax(0,1fr) auto;
-      gap:28px;
-      align-items:center;
-      text-align:right;
-      color:white;
-      margin:0 0 20px;
-      padding:28px 34px;
-      border-radius:30px;
-      background:
-        radial-gradient(420px 220px at 4% 10%,rgba(255,233,114,.20),transparent 64%),
-        linear-gradient(125deg,var(--fm-brand-blue),var(--fm-brand-blue-dark));
-      box-shadow:0 22px 54px rgba(7,56,120,.22);
-    }
-
-    header::before{display:none}
-    header h1{font-size:clamp(30px,5vw,40px);line-height:1.14;margin:6px 0 10px}
-    header p{max-width:650px;margin:0;font-size:18px;line-height:1.55}
-    .hero-kicker{display:inline-block;color:var(--fm-brand-gold);font-size:14px;font-weight:900;letter-spacing:.04em}
-    .brand-lockup{direction:ltr;display:flex;align-items:center;gap:14px;min-width:280px}
-    .brand-lockup img{width:64px;height:64px;object-fit:cover;border-radius:18px;border:2px solid rgba(255,255,255,.72)}
-    .brand-lockup strong{display:block;color:#fff;font-size:22px;letter-spacing:.12em}
-    .brand-lockup span{display:block;margin-top:4px;color:var(--fm-brand-gold);font-size:17px;font-style:italic}
-
-    .panel{
-      background:rgba(255,255,255,.78);
-      border:1px solid rgba(11,77,162,.12);
-      box-shadow:0 22px 60px rgba(16,32,51,.14);
-    }
-
-    .function-box{
-      background:linear-gradient(135deg,#fff,var(--fm-brand-cream));
-      border:1px solid rgba(11,77,162,.12);
-    }
-
-    .line{background:linear-gradient(90deg,var(--fm-brand-violet),var(--fm-brand-gold),var(--fm-brand-blue))}
-    .lead-coef{background:var(--fm-brand-gold);box-shadow:none}
-
-    .learning-layout{
-      display:grid;
-      grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
-      gap:16px;
-      margin-bottom:20px;
-      align-items:stretch;
-    }
-
-    .learning-layout .controls{margin:0}
-    .learning-layout .box{height:100%}
-    .box,.result-box{
-      border:1px solid rgba(11,77,162,.13);
-      box-shadow:0 10px 26px rgba(16,32,51,.06);
-    }
-
-    .rule-box h2,.result-box h2{color:var(--fm-brand-blue)}
-    .rule-box h2{margin:0 0 10px;font-size:22px}
-    .rule-card{border-top:1px solid rgba(11,77,162,.13);padding:12px 0}
-    .rule-card:first-of-type{border-top:0}
-    .rule-card strong{display:block;margin-bottom:4px}
-    .rule-card span{display:block;color:#52657a;font-size:14px;line-height:1.45}
-
-    label{display:block;font-size:17px;font-weight:800;margin-bottom:10px}
-    textarea{border-color:rgba(11,77,162,.28);background:#fff}
-    textarea:focus{outline:3px solid rgba(114,71,232,.25);border-color:var(--fm-brand-violet)}
-
-    .buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-    button{width:100%;margin:0;background:linear-gradient(135deg,var(--fm-brand-blue),var(--fm-brand-blue-dark));box-shadow:0 9px 20px rgba(11,77,162,.20)}
-    button.secondary{background:var(--fm-brand-gold);color:var(--fm-brand-ink)}
-    button:focus-visible{outline:3px solid var(--fm-brand-gold);outline-offset:3px}
-
-    .balance-area{
-      background:
-        radial-gradient(circle at 50% 12%,rgba(255,233,114,.26),transparent 28%),
-        linear-gradient(180deg,#fff,var(--fm-brand-cream));
-      border:1px solid rgba(11,77,162,.14);
-      box-shadow:0 16px 36px rgba(16,32,51,.08);
-    }
-
-    .beam{background:linear-gradient(90deg,var(--fm-brand-violet),var(--fm-brand-blue),var(--fm-brand-gold))}
-    .answer{color:var(--fm-brand-blue)}
-    .coef-calc{background:var(--fm-brand-cream);border-color:var(--fm-brand-gold)}
-
-    @media(max-width:850px){
-      body{padding:14px 10px 28px}
-      header{min-height:0;grid-template-columns:1fr;padding:22px 20px;border-radius:24px;gap:20px}
-      header h1{font-size:30px}
-      header p{padding:0;font-size:16px}
-      .brand-lockup{min-width:0}
-      .brand-lockup img{width:54px;height:54px;border-radius:15px}
-      .brand-lockup strong{font-size:18px}
-      .learning-layout{grid-template-columns:1fr}
-    }
-
-    @media(max-width:420px){
-      header{padding:18px 16px;border-radius:20px}
-      header h1{font-size:26px}
-      .brand-lockup strong{font-size:16px;letter-spacing:.08em}
-      .brand-lockup span{font-size:15px}
-      .buttons{grid-template-columns:1fr}
-      .fraction{min-width:0;width:100%}
-      .panel{padding:12px;border-radius:22px}
-      .balance-area{min-height:300px}
-    }
-
   </style>
-
 </head>
-
 <body>
+  <a class="skip-link" href="#main" data-i18n="skip">דלגו לתוכן</a>
 
-<div class="wrap">
-
-  <header>
-    <div class="hero-copy">
-      <div class="hero-kicker">למידה דרך דימוי</div>
-      <h1>מאזניים לאסימפטוטה אופקית</h1>
-      <p>מי כבד יותר — המונה או המכנה? משווים דרגות ומגלים לאן הפונקציה מתקרבת.</p>
-    </div>
-    <div class="brand-lockup" aria-label="Fundamatics — Maths for life">
-      <img src="./assets/images/logo.jpeg" alt="" />
-      <div>
-        <strong>FUNDAMATICS</strong>
-        <span>Maths for life</span>
-      </div>
-    </div>
-  </header>
-
-  <div class="panel">
-
-    <div class="function-box">
-
-      <div class="function-title">
-        הפונקציה הרציונלית
-      </div>
-
-      <div class="fraction">
-
-        <div class="poly" id="numView">
-          3x² + 1
-        </div>
-
-        <div class="line"></div>
-
-        <div class="poly" id="denView">
-          6x² - 4
-        </div>
-
-      </div>
-
-    </div>
-
-    <div class="learning-layout">
-      <div class="box rule-box">
-        <h2>איך המאזניים פועלים?</h2>
-        <div class="rule-card"><strong>המונה כבד יותר</strong><span>דרגת המונה גבוהה יותר → אין אסימפטוטה אופקית.</span></div>
-        <div class="rule-card"><strong>המכנה כבד יותר</strong><span>דרגת המכנה גבוהה יותר → הפונקציה מתקרבת ל־y = 0.</span></div>
-        <div class="rule-card"><strong>המשקלים שווים</strong><span>הדרגות שוות → מחלקים את המקדמים המובילים.</span></div>
-      </div>
-
-      <div class="controls">
-        <div class="box">
-          <label for="funcInput">הכנס פונקציה רציונלית</label>
-          <textarea id="funcInput">(3x^2 + 1)/(6x^2 - 4)</textarea>
-
-        <div class="hint">
-          למשל:
-          (2x^3+5)/(4x^2-1)
-        </div>
-
-        <div class="buttons">
-          <button onclick="parseAndUpdate()">
-            נתח פונקציה
-          </button>
-
-          <button class="secondary" onclick="randomFunction()">
-            הגרל פונקציה
-          </button>
-        </div>
-
+  <div class="wrap">
+    <header class="hero" data-i18n-aria-label="headerAria">
+      <div class="brand-product-lockup">
+        <a class="fundamatics-brand" href="https://fundamatics.com/" aria-label="Fundamatics — Maths for life">
+          <img src="./assets/brand/fundamatics-full-logo-white.svg" alt="Fundamatics">
+          <span class="brand-tagline">Maths for life</span>
+        </a>
+        <span class="brand-divider" aria-hidden="true">/</span>
+        <div class="product-identity">
+          <h1 data-i18n="title">מאזניים לאסימפטוטה אופקית</h1>
+          <p data-i18n="subtitle">מי כבד יותר — המונה או המכנה? משווים דרגות ומגלים לאן הפונקציה מתקרבת.</p>
         </div>
       </div>
-    </div>
 
-    <div class="balance-area" id="scene">
+      <div class="header-actions">
+        <div class="language-switcher" role="group" aria-label="בחירת שפה" data-i18n-aria-label="languageLabel">
+          <button type="button" data-language="he" aria-pressed="true" lang="he" data-i18n="languageHebrew">עברית</button>
+          <button type="button" data-language="en" aria-pressed="false" lang="en" data-i18n="languageEnglish">English</button>
+        </div>
+        <a class="fundamatics-home-link" href="https://fundamatics.com/" data-i18n="homeLink">חזרה ל־Fundamatics</a>
+      </div>
+    </header>
 
-      <div class="sky">
-        המונה כבד יותר → הולכים לשמיים 🚀
+    <main id="main" class="panel">
+      <section class="function-box" aria-labelledby="function-title">
+        <div class="section-label" id="function-title" data-i18n="functionTitle">הפונקציה הרציונלית</div>
+        <div class="fraction" aria-live="polite">
+          <div class="polynomial" id="numView">3x² + 1</div>
+          <div class="fraction-line" aria-hidden="true"></div>
+          <div class="polynomial" id="denView">6x² − 4</div>
+        </div>
+      </section>
+
+      <div class="learning-layout">
+        <section class="card" aria-labelledby="rules-title">
+          <h2 id="rules-title" data-i18n="rulesTitle">איך המאזניים פועלים?</h2>
+          <div class="rule">
+            <strong data-i18n="ruleNumeratorTitle">המונה כבד יותר</strong>
+            <span data-i18n="ruleNumeratorText">דרגת המונה גבוהה יותר ← אין אסימפטוטה אופקית.</span>
+          </div>
+          <div class="rule">
+            <strong data-i18n="ruleDenominatorTitle">המכנה כבד יותר</strong>
+            <span data-i18n="ruleDenominatorText">דרגת המכנה גבוהה יותר ← הפונקציה מתקרבת ל־y = 0.</span>
+          </div>
+          <div class="rule">
+            <strong data-i18n="ruleEqualTitle">המשקלים שווים</strong>
+            <span data-i18n="ruleEqualText">הדרגות שוות ← מחלקים את המקדמים המובילים.</span>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="input-label">
+          <label id="input-label" for="funcInput" data-i18n="inputLabel">הכניסו פונקציה רציונלית</label>
+          <textarea id="funcInput" aria-describedby="input-hint input-error" spellcheck="false">(3x^2 + 1)/(6x^2 - 4)</textarea>
+          <div class="hint" id="input-hint"><span data-i18n="example">למשל:</span> <bdi>(2x^3+5)/(4x^2-1)</bdi></div>
+          <div class="input-error" id="input-error" role="alert"></div>
+          <div class="buttons">
+            <button class="action" id="analyzeButton" type="button" data-i18n="analyze">נתחו פונקציה</button>
+            <button class="action secondary" id="randomButton" type="button" data-i18n="random">הגרילו פונקציה</button>
+          </div>
+        </section>
       </div>
 
-      <div class="ground">
-        המכנה כבד יותר → y = 0 🌱
+      <section class="balance-area" id="scene" aria-label="הדמיית מאזניים" data-i18n-aria-label="sceneLabel">
+        <div class="scene-message sky" data-i18n="skyMessage">המונה כבד יותר ← עולים לשמיים 🚀</div>
+        <div class="scene-message ground" data-i18n="groundMessage">המכנה כבד יותר ← מתקרבים ל־y = 0 🌱</div>
+        <div class="scene-icon rocket" aria-hidden="true">🚀</div>
+        <div class="scene-icon seed" aria-hidden="true">🌱</div>
+        <div class="scene-icon judge" aria-hidden="true">⚖️<small data-i18n="judge">בודקים מקדמים</small></div>
+        <div class="beam" aria-hidden="true"></div>
+        <div class="pivot" aria-hidden="true"></div>
+        <div class="pan left" aria-hidden="true"></div>
+        <div class="pan right" aria-hidden="true"></div>
+        <div class="weight left" id="wL" aria-hidden="true">x²</div>
+        <div class="weight right" id="wR" aria-hidden="true">x²</div>
+      </section>
+
+      <div class="results" aria-live="polite">
+        <section class="result-card">
+          <h2 data-i18n="explanationTitle">מה המאזניים אומרים?</h2>
+          <div class="explanation" id="explanation"></div>
+        </section>
+        <section class="result-card">
+          <h2 data-i18n="answerTitle">האסימפטוטה האופקית</h2>
+          <div class="answer" id="answer"></div>
+        </section>
       </div>
+    </main>
 
-      <div class="judge">
-        👨‍⚖️
-        <small>
-          השופט בודק מקדמים
-        </small>
-      </div>
-
-      <div class="rocket">
-        🚀
-      </div>
-
-      <div class="seed">
-        🌱
-      </div>
-
-      <div class="beam"></div>
-
-      <div class="pivot"></div>
-
-      <div class="pan left"></div>
-
-      <div class="pan right"></div>
-
-      <div class="weight left" id="wL">
-        x²
-      </div>
-
-      <div class="weight right" id="wR">
-        x²
-      </div>
-
-    </div>
-
-    <div class="result">
-
-      <div class="result-box">
-
-        <h2>
-          מה המאזניים אומרים?
-        </h2>
-
-        <div id="explanation"></div>
-
-      </div>
-
-      <div class="result-box">
-
-        <h2>
-          האסימפטוטה האופקית
-        </h2>
-
-        <div class="answer" id="answer"></div>
-
-      </div>
-
-    </div>
-
+    <footer class="footer" data-i18n="footer">Fundamatics · מתמטיקה שמבינים, לא רק זוכרים.</footer>
   </div>
 
-</div>
-
-<script>
-
-const explanation =
-  document.getElementById('explanation');
-
-const answer =
-  document.getElementById('answer');
-
-const wL =
-  document.getElementById('wL');
-
-const wR =
-  document.getElementById('wR');
-
-const scene =
-  document.getElementById('scene');
-
-const numView =
-  document.getElementById('numView');
-
-const denView =
-  document.getElementById('denView');
-
-const funcInput =
-  document.getElementById('funcInput');
-
-function toSup(n){
-
-  return String(n)
-    .split('')
-    .map(c=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[c]||c)
-    .join('');
-}
-
-function powLabel(d){
-
-  if(d===0) return '1';
-
-  if(d===1) return 'x';
-
-  return 'x'+toSup(d);
-}
-
-function clean(s){
-
-  return s
-    .replace(/\s/g,'')
-    .replace(/−/g,'-');
-}
-
-function pretty(s){
-
-  return s
-    .replace(/\^([0-9]+)/g,(m,n)=>toSup(n));
-}
-
-function leading(poly){
-
-  let p = clean(poly);
-
-  p = p.replace(/-/g,'+-');
-
-  if(p[0]==='+'){
-    p = p.slice(1);
-  }
-
-  let terms =
-    p.split('+').filter(Boolean);
-
-  let bestDeg = -1;
-  let bestCoef = 0;
-
-  for(const t of terms){
-
-    let deg = 0;
-    let coef = 0;
-
-    if(t.includes('x')){
-
-      let before =
-        t.split('x')[0];
-
-      if(before==='' || before==='+'){
-        coef = 1;
+  <script>
+    const translations = {
+      he: {
+        documentTitle: "Fundamatics — מאזניים לאסימפטוטה אופקית",
+        skip: "דלגו לתוכן",
+        headerAria: "מאזניים לאסימפטוטה אופקית מבית Fundamatics",
+        languageLabel: "בחירת שפה",
+        languageHebrew: "עברית",
+        languageEnglish: "English",
+        homeLink: "חזרה ל־Fundamatics",
+        title: "מאזניים לאסימפטוטה אופקית",
+        subtitle: "מי כבד יותר — המונה או המכנה? משווים דרגות ומגלים לאן הפונקציה מתקרבת.",
+        functionTitle: "הפונקציה הרציונלית",
+        rulesTitle: "איך המאזניים פועלים?",
+        ruleNumeratorTitle: "המונה כבד יותר",
+        ruleNumeratorText: "דרגת המונה גבוהה יותר ← אין אסימפטוטה אופקית.",
+        ruleDenominatorTitle: "המכנה כבד יותר",
+        ruleDenominatorText: "דרגת המכנה גבוהה יותר ← הפונקציה מתקרבת ל־y = 0.",
+        ruleEqualTitle: "המשקלים שווים",
+        ruleEqualText: "הדרגות שוות ← מחלקים את המקדמים המובילים.",
+        inputLabel: "הכניסו פונקציה רציונלית",
+        example: "למשל:",
+        analyze: "נתחו פונקציה",
+        random: "הגרילו פונקציה",
+        sceneLabel: "הדמיית מאזניים המשווה בין דרגות המונה והמכנה",
+        skyMessage: "המונה כבד יותר ← עולים לשמיים 🚀",
+        groundMessage: "המכנה כבד יותר ← מתקרבים ל־y = 0 🌱",
+        judge: "בודקים מקדמים",
+        explanationTitle: "מה המאזניים אומרים?",
+        answerTitle: "האסימפטוטה האופקית",
+        footer: "Fundamatics · מתמטיקה שמבינים, לא רק זוכרים.",
+        errorFormat: "כתבו פונקציה בצורה (מונה)/(מכנה).",
+        errorPolynomial: "בדקו שהמונה והמכנה מכילים פולינומים תקינים ב־x.",
+        errorDenominator: "המכנה לא יכול להיות פולינום האפס.",
+        numeratorHeavy: "דרגת המונה גבוהה מדרגת המכנה, ולכן הפונקציה אינה מתייצבת לערך סופי.",
+        denominatorHeavy: "דרגת המכנה גבוהה מדרגת המונה. המונה נעשה זניח ביחס למכנה, ולכן המנה מתקרבת ל־0.",
+        equalHeavy: "הדרגות שוות, ולכן האסימפטוטה נקבעת לפי היחס בין המקדמים המובילים.",
+        none: "אין",
+        degreeSummary: "דרגת המונה: {n} · דרגת המכנה: {d}"
+      },
+      en: {
+        documentTitle: "Fundamatics — Horizontal Asymptote Balance",
+        skip: "Skip to content",
+        headerAria: "Horizontal Asymptote Balance by Fundamatics",
+        languageLabel: "Choose language",
+        languageHebrew: "עברית",
+        languageEnglish: "English",
+        homeLink: "Back to Fundamatics",
+        title: "The Horizontal Asymptote Balance",
+        subtitle: "Which is heavier—the numerator or the denominator? Compare degrees and discover where the function is heading.",
+        functionTitle: "The rational function",
+        rulesTitle: "How does the balance work?",
+        ruleNumeratorTitle: "The numerator is heavier",
+        ruleNumeratorText: "Its degree is higher → there is no horizontal asymptote.",
+        ruleDenominatorTitle: "The denominator is heavier",
+        ruleDenominatorText: "Its degree is higher → the function approaches y = 0.",
+        ruleEqualTitle: "The weights are equal",
+        ruleEqualText: "The degrees are equal → divide the leading coefficients.",
+        inputLabel: "Enter a rational function",
+        example: "Example:",
+        analyze: "Analyze function",
+        random: "Try a random function",
+        sceneLabel: "A balance comparing the degrees of the numerator and denominator",
+        skyMessage: "The numerator is heavier → up we go 🚀",
+        groundMessage: "The denominator is heavier → approaching y = 0 🌱",
+        judge: "Checking coefficients",
+        explanationTitle: "What does the balance tell us?",
+        answerTitle: "The horizontal asymptote",
+        footer: "Fundamatics · Maths you understand, not just remember.",
+        errorFormat: "Write the function in the form (numerator)/(denominator).",
+        errorPolynomial: "Check that the numerator and denominator are valid polynomials in x.",
+        errorDenominator: "The denominator cannot be the zero polynomial.",
+        numeratorHeavy: "The numerator's degree is higher, so the function does not settle toward a finite value.",
+        denominatorHeavy: "The denominator's degree is higher. The numerator becomes negligible by comparison, so the quotient approaches 0.",
+        equalHeavy: "The degrees are equal, so the asymptote is the ratio of the leading coefficients.",
+        none: "None",
+        degreeSummary: "Numerator degree: {n} · Denominator degree: {d}"
       }
+    };
 
-      else if(before==='-'){
-        coef = -1;
-      }
+    const elements = {
+      input: document.getElementById("funcInput"),
+      error: document.getElementById("input-error"),
+      numView: document.getElementById("numView"),
+      denView: document.getElementById("denView"),
+      scene: document.getElementById("scene"),
+      wL: document.getElementById("wL"),
+      wR: document.getElementById("wR"),
+      explanation: document.getElementById("explanation"),
+      answer: document.getElementById("answer"),
+      analyze: document.getElementById("analyzeButton"),
+      random: document.getElementById("randomButton")
+    };
 
-      else{
-        coef = Number(before);
-      }
+    let language = "he";
+    let currentAnalysis = null;
+    let currentErrorKey = null;
 
-      let pow =
-        t.match(/x\^(\d+)/);
-
-      deg = pow ? Number(pow[1]) : 1;
+    function t(key) {
+      return translations[language][key];
     }
 
-    else{
+    function setLanguage(nextLanguage) {
+      language = nextLanguage;
+      document.documentElement.lang = language;
+      document.documentElement.dir = language === "he" ? "rtl" : "ltr";
+      document.title = t("documentTitle");
 
-      coef = Number(t);
-      deg = 0;
+      document.querySelectorAll("[data-i18n]").forEach((node) => {
+        node.textContent = t(node.dataset.i18n);
+      });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach((node) => {
+        node.setAttribute("aria-label", t(node.dataset.i18nAriaLabel));
+      });
+      document.querySelectorAll("[data-language]").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.language === language));
+      });
+
+      if (currentErrorKey) elements.error.textContent = t(currentErrorKey);
+      try { localStorage.setItem("fundamatics-language", language); } catch (_) {}
+      if (currentAnalysis) renderAnalysis(currentAnalysis);
     }
 
-    if(deg > bestDeg){
-
-      bestDeg = deg;
-      bestCoef = coef;
+    function superscript(number) {
+      const chars = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹", "-": "⁻" };
+      return String(number).split("").map((char) => chars[char] || char).join("");
     }
-  }
 
-  return {
-    deg:bestDeg,
-    coef:bestCoef
-  };
-}
-
-function highlightLeading(poly,lead){
-
-  let p = pretty(poly);
-
-  const coefText =
-    lead.coef===1
-    ? ''
-    : lead.coef===-1
-      ? '-'
-      : String(lead.coef);
-
-  const powerText =
-    lead.deg===1
-    ? 'x'
-    : 'x'+toSup(lead.deg);
-
-  const term =
-    coefText + powerText;
-
-  return p.replace(
-    term,
-    '<span class="lead-coef">'+term+'</span>'
-  );
-}
-
-function splitFraction(input){
-
-  let s = clean(input);
-
-  let parts = s.split('/');
-
-  if(parts.length!==2){
-
-    alert('כתוב פונקציה בצורה מונה/מכנה');
-
-    return null;
-  }
-
-  return parts.map(p=>p.replace(/[()]/g,''));
-}
-
-function parseAndUpdate(){
-
-  const parts =
-    splitFraction(funcInput.value);
-
-  if(!parts) return;
-
-  const n = parts[0];
-  const d = parts[1];
-
-  const nl = leading(n);
-  const dl = leading(d);
-
-  numView.innerHTML =
-    highlightLeading(n,nl);
-
-  denView.innerHTML =
-    highlightLeading(d,dl);
-
-  update(nl,dl);
-}
-
-function update(nl,dl){
-
-  const nd = nl.deg;
-  const dd = dl.deg;
-
-  const nc = nl.coef;
-  const dc = dl.coef;
-
-  scene.className =
-    'balance-area';
-
-  wL.innerHTML =
-    powLabel(nd);
-
-  wR.innerHTML =
-    powLabel(dd);
-
-  let text = '';
-  let ans = '';
-
-  if(nd > dd){
-
-    scene.classList.add('go-sky');
-
-    text =
-      `
-      המונה שוקל יותר ולכן הפונקציה לא מתייצבת.
-      היא הולכת לשמיים.
-      `;
-
-    ans = 'אין';
-  }
-
-  else if(nd < dd){
-
-    scene.classList.add('go-ground');
-
-    text =
-      `
-      המכנה שוקל יותר.
-      משהו קטן חלקי משהו עצום מתקרב ל־0.
-      `;
-
-    ans = 'y = 0';
-  }
-
-  else{
-
-    scene.classList.add('equal');
-
-    const val =
-      (nc/dc).toFixed(2);
-
-    text =
-      `
-      המשקלים זהים ולכן השופט בודק את המקדמים.
-
-      <div class="coef-calc">
-        ${nc} ÷ ${dc} = ${val}
-      </div>
-      `;
-
-    ans = 'y = ' + val;
-  }
-
-  explanation.innerHTML = text;
-
-  answer.innerHTML = ans;
-}
-
-function randomFunction(){
-
-  const cases =
-    ['sky','ground','equal'];
-
-  const c =
-    cases[Math.floor(Math.random()*cases.length)];
-
-  let nd,dd;
-
-  if(c==='sky'){
-
-    dd =
-      Math.floor(Math.random()*3)+1;
-
-    nd = dd + 1;
-  }
-
-  else if(c==='ground'){
-
-    nd =
-      Math.floor(Math.random()*3)+1;
-
-    dd = nd + 1;
-  }
-
-  else{
-
-    nd = dd =
-      Math.floor(Math.random()*4)+1;
-  }
-
-  const nc =
-    Math.floor(Math.random()*8)+1;
-
-  const dc =
-    Math.floor(Math.random()*8)+1;
-
-  const func =
-    `(${nc}x^${nd}+1)/(${dc}x^${dd}-4)`;
-
-  funcInput.value = func;
-
-  parseAndUpdate();
-}
-
-parseAndUpdate();
-
-</script>
-
+    function powerLabel(degree) {
+      if (degree === 0) return "1";
+      return degree === 1 ? "x" : `x${superscript(degree)}`;
+    }
+
+    function normalize(value) {
+      return value
+        .trim()
+        .replace(/[−–—]/g, "-")
+        .replace(/[×·]/g, "*")
+        .replace(/\s+/g, "")
+        .replace(/²/g, "^2")
+        .replace(/³/g, "^3");
+    }
+
+    function splitFraction(value) {
+      const input = normalize(value);
+      let depth = 0;
+      let slashIndex = -1;
+
+      for (let index = 0; index < input.length; index += 1) {
+        if (input[index] === "(") depth += 1;
+        if (input[index] === ")") depth -= 1;
+        if (input[index] === "/" && depth === 0) {
+          if (slashIndex !== -1) throw new Error("errorFormat");
+          slashIndex = index;
+        }
+        if (depth < 0) throw new Error("errorFormat");
+      }
+
+      if (depth !== 0 || slashIndex < 1 || slashIndex >= input.length - 1) {
+        throw new Error("errorFormat");
+      }
+
+      const unwrap = (part) => {
+        if (part.startsWith("(") && part.endsWith(")")) return part.slice(1, -1);
+        return part;
+      };
+
+      return [unwrap(input.slice(0, slashIndex)), unwrap(input.slice(slashIndex + 1))];
+    }
+
+    function parsePolynomial(source) {
+      let polynomial = normalize(source).replace(/\*/g, "");
+      if (!polynomial || /[^0-9xX.+\-^]/.test(polynomial)) throw new Error("errorPolynomial");
+      polynomial = polynomial.replace(/X/g, "x");
+      if (!/^[+-]/.test(polynomial)) polynomial = `+${polynomial}`;
+
+      const terms = polynomial.match(/[+-][^+-]+/g);
+      if (!terms || terms.join("") !== polynomial) throw new Error("errorPolynomial");
+
+      const coefficients = new Map();
+      terms.forEach((term) => {
+        const sign = term[0] === "-" ? -1 : 1;
+        const body = term.slice(1);
+        let degree;
+        let coefficient;
+
+        if (body.includes("x")) {
+          const match = body.match(/^(\d*\.?\d*)x(?:\^(\d+))?$/);
+          if (!match) throw new Error("errorPolynomial");
+          coefficient = match[1] === "" ? 1 : Number(match[1]);
+          degree = match[2] === undefined ? 1 : Number(match[2]);
+        } else {
+          if (!/^(?:\d+\.?\d*|\.\d+)$/.test(body)) throw new Error("errorPolynomial");
+          coefficient = Number(body);
+          degree = 0;
+        }
+
+        if (!Number.isFinite(coefficient) || !Number.isSafeInteger(degree)) throw new Error("errorPolynomial");
+        coefficients.set(degree, (coefficients.get(degree) || 0) + sign * coefficient);
+      });
+
+      const nonZero = [...coefficients.entries()].filter(([, coefficient]) => Math.abs(coefficient) > 1e-12);
+      if (nonZero.length === 0) return { degree: -Infinity, coefficient: 0 };
+      const degree = Math.max(...nonZero.map(([power]) => power));
+      return { degree, coefficient: coefficients.get(degree) };
+    }
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    }
+
+    function prettyPolynomial(source) {
+      return normalize(source)
+        .replace(/\*/g, "")
+        .replace(/\^(\d+)/g, (_, degree) => superscript(degree))
+        .replace(/\+/g, " + ")
+        .replace(/-/g, " − ")
+        .replace(/^\s+/, "");
+    }
+
+    function highlightedPolynomial(source, leading) {
+      const pretty = prettyPolynomial(source);
+      const coefficient = leading.coefficient;
+      const coefficientText = coefficient === 1 ? "" : coefficient === -1 ? "−" : String(coefficient).replace("-", "−");
+      const term = leading.degree === 0 ? String(coefficient).replace("-", "−") : `${coefficientText}${powerLabel(leading.degree)}`;
+      const safePretty = escapeHtml(pretty);
+      const displayedTerm = term.startsWith("−") ? term.replace("−", "− ") : term;
+      const safeTerm = escapeHtml(displayedTerm);
+      return safePretty.replace(safeTerm, `<span class="leading-term">${safeTerm}</span>`);
+    }
+
+    function formatNumber(value) {
+      if (Number.isInteger(value)) return String(value);
+      return String(Number(value.toFixed(3)));
+    }
+
+    function analyze() {
+      try {
+        const [numerator, denominator] = splitFraction(elements.input.value);
+        const numeratorLeading = parsePolynomial(numerator);
+        const denominatorLeading = parsePolynomial(denominator);
+        if (denominatorLeading.degree === -Infinity) throw new Error("errorDenominator");
+        if (numeratorLeading.degree === -Infinity) throw new Error("errorPolynomial");
+
+        currentAnalysis = { numerator, denominator, numeratorLeading, denominatorLeading };
+        currentErrorKey = null;
+        elements.input.setAttribute("aria-invalid", "false");
+        elements.error.textContent = "";
+        renderAnalysis(currentAnalysis);
+      } catch (error) {
+        const key = translations[language][error.message] ? error.message : "errorPolynomial";
+        currentErrorKey = key;
+        elements.input.setAttribute("aria-invalid", "true");
+        elements.error.textContent = t(key);
+        elements.input.focus();
+      }
+    }
+
+    function renderAnalysis(analysis) {
+      const { numerator, denominator, numeratorLeading: nl, denominatorLeading: dl } = analysis;
+      elements.numView.innerHTML = highlightedPolynomial(numerator, nl);
+      elements.denView.innerHTML = highlightedPolynomial(denominator, dl);
+      elements.wL.textContent = powerLabel(nl.degree);
+      elements.wR.textContent = powerLabel(dl.degree);
+      elements.scene.className = "balance-area";
+
+      const degrees = t("degreeSummary").replace("{n}", nl.degree).replace("{d}", dl.degree);
+      let explanationKey;
+      let answer;
+      let calculation = "";
+
+      if (nl.degree > dl.degree) {
+        elements.scene.classList.add("go-sky");
+        explanationKey = "numeratorHeavy";
+        answer = t("none");
+      } else if (nl.degree < dl.degree) {
+        elements.scene.classList.add("go-ground");
+        explanationKey = "denominatorHeavy";
+        answer = "y = 0";
+      } else {
+        elements.scene.classList.add("equal");
+        explanationKey = "equalHeavy";
+        const ratio = nl.coefficient / dl.coefficient;
+        answer = `y = ${formatNumber(ratio)}`;
+        calculation = `<div class="calculation">${formatNumber(nl.coefficient)} ÷ ${formatNumber(dl.coefficient)} = ${formatNumber(ratio)}</div>`;
+      }
+
+      elements.explanation.innerHTML = `<p>${escapeHtml(t(explanationKey))}</p><p><strong>${escapeHtml(degrees)}</strong></p>${calculation}`;
+      elements.answer.textContent = answer;
+    }
+
+    function randomFunction() {
+      const type = ["sky", "ground", "equal"][Math.floor(Math.random() * 3)];
+      let numeratorDegree = Math.floor(Math.random() * 3) + 1;
+      let denominatorDegree = Math.floor(Math.random() * 3) + 1;
+      if (type === "sky") numeratorDegree = denominatorDegree + 1;
+      if (type === "ground") denominatorDegree = numeratorDegree + 1;
+      if (type === "equal") denominatorDegree = numeratorDegree;
+      const numeratorCoefficient = Math.floor(Math.random() * 8) + 1;
+      const denominatorCoefficient = Math.floor(Math.random() * 8) + 1;
+      elements.input.value = `(${numeratorCoefficient}x^${numeratorDegree}+1)/(${denominatorCoefficient}x^${denominatorDegree}-4)`;
+      analyze();
+    }
+
+    document.querySelectorAll("[data-language]").forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.language));
+    });
+    elements.analyze.addEventListener("click", analyze);
+    elements.random.addEventListener("click", randomFunction);
+    elements.input.addEventListener("keydown", (event) => {
+      if ((event.ctrlKey || event.metaKey) && event.key === "Enter") analyze();
+    });
+
+    let preferredLanguage = "he";
+    try {
+      const saved = localStorage.getItem("fundamatics-language");
+      if (saved === "he" || saved === "en") preferredLanguage = saved;
+    } catch (_) {}
+
+    setLanguage(preferredLanguage);
+    analyze();
+  </script>
 </body>
 </html>
-
