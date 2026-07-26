@@ -422,64 +422,86 @@
     .scene-message.ground { inset-block-end: 12px; color: var(--success); }
     .go-sky .scene-message.sky, .go-ground .scene-message.ground { opacity: 1; }
 
-    .beam {
+    .balance-illustration {
       position: absolute;
-      inset-inline-start: 50%;
-      inset-block-start: 45%;
-      width: min(560px, 78vw);
-      height: clamp(9px, 1.8vw, 14px);
-      background: linear-gradient(90deg, var(--violet), var(--blue), var(--gold));
-      border-radius: 999px;
-      transform: translateX(-50%);
-      transform-origin: center;
-      transition: transform .9s ease;
+      inset: 42px 1.5% 5px;
+      width: 97%;
+      height: calc(100% - 47px);
+      overflow: visible;
+      filter: drop-shadow(0 9px 8px rgba(34, 40, 73, .13));
     }
 
-    .pivot {
-      position: absolute;
-      inset-inline-start: 50%;
-      inset-block-start: 48%;
-      width: 0;
-      height: 0;
-      border-inline: clamp(25px, 5vw, 42px) solid transparent;
-      border-block-end: clamp(72px, 14vw, 120px) solid var(--ink);
-      transform: translateX(-50%);
+    .scale-moving {
+      transform-origin: 400px 128px;
+      transition: transform .9s cubic-bezier(.2, .8, .25, 1);
     }
 
-    .pan {
-      position: absolute;
-      inset-block-start: 57%;
-      width: min(190px, 31vw);
-      height: clamp(11px, 2vw, 17px);
-      background: var(--ink);
-      border-radius: 50%;
-      transition: inset-block-start .9s ease;
+    .scale-pan-leveler {
+      transition: transform .9s cubic-bezier(.2, .8, .25, 1);
     }
 
-    .pan.left { left: clamp(48px, 18vw, 210px); }
-    .pan.right { right: clamp(48px, 18vw, 210px); }
+    .scale-pan-leveler.left { transform-origin: 142px 128px; }
+    .scale-pan-leveler.right { transform-origin: 658px 128px; }
 
-    .weight {
-      position: absolute;
-      inset-block-start: 62%;
-      z-index: 5;
-      width: clamp(74px, 17vw, 116px);
-      height: clamp(56px, 12vw, 80px);
-      display: grid;
-      place-items: center;
-      color: var(--ink);
-      background: var(--brand-yellow);
-      border: 2px solid var(--primary);
-      border-radius: 20px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .15);
+    .scale-metal {
+      fill: url("#metalGradient");
+      stroke: #26334f;
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .scale-metal-highlight {
+      fill: none;
+      stroke: rgba(255, 255, 255, .7);
+      stroke-linecap: round;
+    }
+
+    .scale-chain {
+      fill: none;
+      stroke: #43516d;
+      stroke-width: 5;
+      stroke-linecap: round;
+    }
+
+    .scale-pan {
+      fill: url("#panGradient");
+      stroke: #26334f;
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .scale-weight {
+      fill: url("#weightGradient");
+      stroke: #725c08;
+      stroke-width: 5;
+      stroke-linejoin: round;
+    }
+
+    .scale-weight-handle {
+      fill: none;
+      stroke: #725c08;
+      stroke-width: 12;
+      stroke-linecap: round;
+    }
+
+    .scale-weight-label {
+      fill: var(--ink);
       font-family: "Cambria Math", Georgia, serif;
-      font-size: clamp(1.45rem, 5vw, 2rem);
+      font-size: 38px;
       font-weight: 800;
-      transition: inset-block-start .9s ease;
+      text-anchor: middle;
+      dominant-baseline: middle;
     }
 
-    .weight.left { left: clamp(86px, 21vw, 248px); }
-    .weight.right { right: clamp(86px, 21vw, 248px); }
+    .scale-side-label {
+      fill: var(--blue);
+      font-family: "Noto Sans Hebrew", "Montserrat", Arial, sans-serif;
+      font-size: 21px;
+      font-weight: 850;
+      text-anchor: middle;
+    }
+
+    .scale-base-shadow { fill: rgba(38, 51, 79, .13); }
 
     .scene-icon {
       position: absolute;
@@ -514,12 +536,10 @@
     .go-sky .rocket { bottom: 57%; opacity: 1; }
     .go-ground .seed { top: 57%; opacity: 1; }
     .equal .judge { opacity: 1; transform: translateX(-50%) scale(1); }
-    .go-sky .beam { transform: translateX(-50%) rotate(-12deg); }
-    .go-ground .beam { transform: translateX(-50%) rotate(12deg); }
-    .go-sky .weight.left, .go-sky .pan.left { inset-block-start: 70%; }
-    .go-sky .weight.right, .go-sky .pan.right { inset-block-start: 50%; }
-    .go-ground .weight.left, .go-ground .pan.left { inset-block-start: 50%; }
-    .go-ground .weight.right, .go-ground .pan.right { inset-block-start: 70%; }
+    .go-sky .scale-moving { transform: rotate(-8deg); }
+    .go-sky .scale-pan-leveler { transform: rotate(8deg); }
+    .go-ground .scale-moving { transform: rotate(8deg); }
+    .go-ground .scale-pan-leveler { transform: rotate(-8deg); }
 
     .results {
       display: grid;
@@ -686,10 +706,7 @@
       .buttons { grid-template-columns: 1fr; }
       .card, .result-card { padding: 16px; }
       .balance-area { min-height: 300px; height: 330px; }
-      .weight.left { left: clamp(55px, 20vw, 95px); }
-      .weight.right { right: clamp(55px, 20vw, 95px); }
-      .pan.left { left: clamp(22px, 12vw, 55px); }
-      .pan.right { right: clamp(22px, 12vw, 55px); }
+      .balance-illustration { inset-inline: -7%; width: 114%; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -769,13 +786,59 @@
         <div class="scene-message ground" data-i18n="groundMessage">המכנה כבד יותר ← מתקרבים ל־y = 0 🌱</div>
         <div class="scene-icon rocket" aria-hidden="true">🚀</div>
         <div class="scene-icon seed" aria-hidden="true">🌱</div>
-        <div class="scene-icon judge" aria-hidden="true">⚖️<small data-i18n="judge">בודקים מקדמים</small></div>
-        <div class="beam" aria-hidden="true"></div>
-        <div class="pivot" aria-hidden="true"></div>
-        <div class="pan left" aria-hidden="true"></div>
-        <div class="pan right" aria-hidden="true"></div>
-        <div class="weight left" id="wL" aria-hidden="true">x²</div>
-        <div class="weight right" id="wR" aria-hidden="true">x²</div>
+        <div class="scene-icon judge" aria-hidden="true"><small data-i18n="judge">המשקל שווה — בודקים מקדמים</small></div>
+        <svg class="balance-illustration" viewBox="0 0 800 390" role="img" aria-labelledby="scale-title scale-description">
+          <title id="scale-title" data-i18n="scaleTitle">מאזניים עם משקולות של דרגות המונה והמכנה</title>
+          <desc id="scale-description" data-i18n="scaleDescription">הצד בעל החזקה הגבוהה יותר יורד וממחיש איזו דרגה כבדה יותר.</desc>
+          <defs>
+            <linearGradient id="metalGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9eacd0"/>
+              <stop offset=".45" stop-color="#f6f8ff"/>
+              <stop offset="1" stop-color="#53617f"/>
+            </linearGradient>
+            <linearGradient id="panGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#dfe6f7"/>
+              <stop offset="1" stop-color="#7c8bad"/>
+            </linearGradient>
+            <linearGradient id="weightGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#fff3a2"/>
+              <stop offset=".55" stop-color="#f8cf37"/>
+              <stop offset="1" stop-color="#d8a80e"/>
+            </linearGradient>
+          </defs>
+
+          <ellipse class="scale-base-shadow" cx="400" cy="366" rx="124" ry="14"/>
+          <path class="scale-metal" d="M322 356 Q322 335 347 330 L374 324 V159 H426 V324 L453 330 Q478 335 478 356 Z"/>
+          <path class="scale-metal-highlight" stroke-width="6" d="M392 173 V318"/>
+          <path class="scale-metal" d="M345 356 H455 Q471 356 477 371 H323 Q329 356 345 356 Z"/>
+          <circle class="scale-metal" cx="400" cy="128" r="39"/>
+          <circle cx="400" cy="128" r="14" fill="#f8cf37" stroke="#725c08" stroke-width="5"/>
+
+          <g class="scale-moving">
+            <rect class="scale-metal" x="125" y="112" width="550" height="32" rx="16"/>
+            <path class="scale-metal-highlight" stroke-width="5" d="M151 121 H649"/>
+
+            <g class="scale-pan-leveler left">
+              <circle cx="142" cy="128" r="10" fill="#f8cf37" stroke="#725c08" stroke-width="4"/>
+              <path class="scale-chain" d="M142 137 L82 245 M142 137 L202 245"/>
+              <path class="scale-pan" d="M58 242 H226 Q216 292 142 298 Q68 292 58 242 Z"/>
+              <path class="scale-weight-handle" d="M113 242 V222 Q113 206 129 206 H155 Q171 206 171 222 V242"/>
+              <path class="scale-weight" d="M102 242 H182 L195 281 H89 Z"/>
+              <text class="scale-weight-label" id="wL" x="142" y="263">x²</text>
+              <text class="scale-side-label" x="142" y="326" data-i18n="numeratorLabel">מונה</text>
+            </g>
+
+            <g class="scale-pan-leveler right">
+              <circle cx="658" cy="128" r="10" fill="#f8cf37" stroke="#725c08" stroke-width="4"/>
+              <path class="scale-chain" d="M658 137 L598 245 M658 137 L718 245"/>
+              <path class="scale-pan" d="M574 242 H742 Q732 292 658 298 Q584 292 574 242 Z"/>
+              <path class="scale-weight-handle" d="M629 242 V222 Q629 206 645 206 H671 Q687 206 687 222 V242"/>
+              <path class="scale-weight" d="M618 242 H698 L711 281 H605 Z"/>
+              <text class="scale-weight-label" id="wR" x="658" y="263">x²</text>
+              <text class="scale-side-label" x="658" y="326" data-i18n="denominatorLabel">מכנה</text>
+            </g>
+          </g>
+        </svg>
       </section>
 
       <div class="results" aria-live="polite">
@@ -818,9 +881,13 @@
         analyze: "נתחו פונקציה",
         random: "הגרילו פונקציה",
         sceneLabel: "הדמיית מאזניים המשווה בין דרגות המונה והמכנה",
+        scaleTitle: "מאזניים עם משקולות של דרגות המונה והמכנה",
+        scaleDescription: "הצד בעל החזקה הגבוהה יותר יורד וממחיש איזו דרגה כבדה יותר.",
+        numeratorLabel: "מונה",
+        denominatorLabel: "מכנה",
         skyMessage: "המונה כבד יותר ← עולים לשמיים 🚀",
         groundMessage: "המכנה כבד יותר ← מתקרבים ל־y = 0 🌱",
-        judge: "בודקים מקדמים",
+        judge: "המשקל שווה — בודקים מקדמים",
         explanationTitle: "מה המאזניים אומרים?",
         answerTitle: "האסימפטוטה האופקית",
         footer: "Fundamatics · מתמטיקה שמבינים, לא רק זוכרים.",
@@ -858,9 +925,13 @@
         analyze: "Analyze function",
         random: "Try a random function",
         sceneLabel: "A balance comparing the degrees of the numerator and denominator",
+        scaleTitle: "A balance with weights for the numerator and denominator degrees",
+        scaleDescription: "The side with the higher power moves down to show which degree is heavier.",
+        numeratorLabel: "Numerator",
+        denominatorLabel: "Denominator",
         skyMessage: "The numerator is heavier → up we go 🚀",
         groundMessage: "The denominator is heavier → approaching y = 0 🌱",
-        judge: "Checking coefficients",
+        judge: "Equal weight — checking coefficients",
         explanationTitle: "What does the balance tell us?",
         answerTitle: "The horizontal asymptote",
         footer: "Fundamatics · Maths you understand, not just remember.",
