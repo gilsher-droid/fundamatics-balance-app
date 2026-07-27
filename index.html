@@ -967,7 +967,8 @@
         pauseSideDenominator: "במכנה",
         pauseZeroDetail: "{side}: המספר {coefficient} הוא למעשה {coefficient}·x⁰, ולכן דרגתו 0. בכתיבה המקובלת לא מציגים x⁰.",
         pauseOneDetail: "{side}: האיבר {term} הוא למעשה {coefficient}·x¹, ולכן דרגתו 1. בכתיבה המקובלת לא כותבים את החזקה 1.",
-        pauseCountdown: "חושפים את הדרגה בעוד {seconds} שניות…",
+        pauseGeneral: "לפני שחושפים את הניתוח, נסו לזהות בעצמכם את החזקה הגבוהה ביותר במונה ובמכנה.",
+        pauseCountdown: "חושפים את הניתוח בעוד {seconds} שניות…",
         pauseCountdownOne: "חושפים את הדרגה בעוד שנייה אחת…",
         pauseAnswer: "עוד רגע…"
       },
@@ -1021,7 +1022,8 @@
         pauseSideDenominator: "In the denominator",
         pauseZeroDetail: "{side}: the number {coefficient} is really {coefficient}·x⁰, so its degree is 0. Standard notation does not display x⁰.",
         pauseOneDetail: "{side}: the term {term} is really {coefficient}·x¹, so its degree is 1. Standard notation does not write exponent 1.",
-        pauseCountdown: "The degree will be revealed in {seconds} seconds…",
+        pauseGeneral: "Before revealing the analysis, try to identify the highest exponent in the numerator and denominator.",
+        pauseCountdown: "The analysis will be revealed in {seconds} seconds…",
         pauseCountdownOne: "The degree will be revealed in 1 second…",
         pauseAnswer: "One moment…"
       }
@@ -1278,7 +1280,7 @@
     }
 
     function degreeLearningMessage(details) {
-      return details.map(degreeDetailMessage).join(" ");
+      return details.length ? details.map(degreeDetailMessage).join(" ") : t("pauseGeneral");
     }
 
     function showLearningHint(details, seconds) {
@@ -1354,7 +1356,7 @@
     function renderAnalysis(analysis, skipDelay = false) {
       cancelReveal();
       const details = specialDegreeDetails(analysis);
-      if (!skipDelay && details.length) {
+      if (!skipDelay) {
         renderLearningPause(analysis, details);
         return;
       }
