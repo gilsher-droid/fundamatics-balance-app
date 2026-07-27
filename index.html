@@ -291,6 +291,65 @@
       white-space: nowrap;
     }
 
+    .coefficient-focus {
+      display: inline-block;
+      margin-inline: .04em;
+      padding-inline: .11em;
+      color: #4322a8;
+      background: rgba(110, 86, 207, .18);
+      border-radius: .28em;
+      box-shadow: 0 0 0 2px rgba(110, 86, 207, .38);
+      line-height: 1.08;
+    }
+
+    .coefficient-badge {
+      display: inline-block;
+      margin-inline-start: .55em;
+      padding: .22em .48em;
+      color: #4322a8;
+      background: rgba(110, 86, 207, .16);
+      border-radius: 999px;
+      box-shadow: 0 0 0 2px rgba(110, 86, 207, .34);
+      font-family: "Noto Sans Hebrew", "Montserrat", Arial, sans-serif;
+      font-size: .38em;
+      font-weight: 800;
+      line-height: 1.2;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .function-box.is-learning {
+      background: #fff8cf;
+      border-color: #efd35a;
+    }
+
+    .degree-learning-hint {
+      width: min(640px, 100%);
+      margin: 10px auto 0;
+      padding: 9px 12px;
+      color: #3f3100;
+      background: linear-gradient(135deg, #ffe36b, #ffd44d);
+      border: 1px solid #d9ae23;
+      border-radius: 12px;
+      font-size: .82rem;
+      font-weight: 700;
+      line-height: 1.42;
+      text-align: center;
+    }
+
+    .degree-learning-hint strong,
+    .degree-learning-hint span { display: block; }
+
+    .degree-learning-hint strong {
+      margin-block-end: 2px;
+      color: var(--primary);
+      font-size: .9rem;
+    }
+
+    .degree-learning-hint[hidden] { display: none; }
+    .learning-pause .balance-illustration { opacity: .72; }
+    .learning-pause .scale-moving { transform: none; }
+
     .learning-layout {
       display: grid;
       grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
@@ -748,6 +807,7 @@
             <div class="fraction-line" aria-hidden="true"></div>
             <div class="polynomial" id="denView">6x² − 4</div>
           </div>
+          <div id="degreeLearningHint" class="degree-learning-hint" role="status" aria-live="polite" hidden></div>
         </section>
 
         <div class="learning-layout">
@@ -899,7 +959,17 @@
         none: "אין",
         degreeSummary: "דרגת המונה: {n} · דרגת המכנה: {d}",
         powerAria: "חזקה מובילה {degree}",
-        degreeBadge: "חזקה {degree}"
+        degreeBadge: "חזקה {degree}",
+        coefficientAria: "מקדם מוביל {coefficient}",
+        coefficientBadge: "מקדם {coefficient}",
+        pauseTitle: "רגע מתמטי",
+        pauseSideNumerator: "במונה",
+        pauseSideDenominator: "במכנה",
+        pauseZeroDetail: "{side}: המספר {coefficient} הוא למעשה {coefficient}·x⁰, ולכן דרגתו 0. בכתיבה המקובלת לא מציגים x⁰.",
+        pauseOneDetail: "{side}: האיבר {term} הוא למעשה {coefficient}·x¹, ולכן דרגתו 1. בכתיבה המקובלת לא כותבים את החזקה 1.",
+        pauseCountdown: "חושפים את הדרגה בעוד {seconds} שניות…",
+        pauseCountdownOne: "חושפים את הדרגה בעוד שנייה אחת…",
+        pauseAnswer: "עוד רגע…"
       },
       en: {
         documentTitle: "Fundamatics — Horizontal Asymptote Balance",
@@ -943,7 +1013,17 @@
         none: "None",
         degreeSummary: "Numerator degree: {n} · Denominator degree: {d}",
         powerAria: "Leading power {degree}",
-        degreeBadge: "power {degree}"
+        degreeBadge: "power {degree}",
+        coefficientAria: "Leading coefficient {coefficient}",
+        coefficientBadge: "coefficient {coefficient}",
+        pauseTitle: "Math pause",
+        pauseSideNumerator: "In the numerator",
+        pauseSideDenominator: "In the denominator",
+        pauseZeroDetail: "{side}: the number {coefficient} is really {coefficient}·x⁰, so its degree is 0. Standard notation does not display x⁰.",
+        pauseOneDetail: "{side}: the term {term} is really {coefficient}·x¹, so its degree is 1. Standard notation does not write exponent 1.",
+        pauseCountdown: "The degree will be revealed in {seconds} seconds…",
+        pauseCountdownOne: "The degree will be revealed in 1 second…",
+        pauseAnswer: "One moment…"
       }
     };
 
@@ -957,6 +1037,8 @@
       wR: document.getElementById("wR"),
       explanation: document.getElementById("explanation"),
       answer: document.getElementById("answer"),
+      degreeHint: document.getElementById("degreeLearningHint"),
+      functionBox: document.querySelector(".function-box"),
       analyze: document.getElementById("analyzeButton"),
       random: document.getElementById("randomButton")
     };
@@ -964,9 +1046,27 @@
     let language = "he";
     let currentAnalysis = null;
     let currentErrorKey = null;
+    let revealTimer = null;
+    let countdownTimer = null;
+    let revealVersion = 0;
+    let revealComplete = false;
 
     function t(key) {
       return translations[language][key];
+    }
+
+    function message(key, replacements = {}) {
+      return Object.entries(replacements).reduce(
+        (text, [replacement, value]) => text.replaceAll(`{${replacement}}`, String(value)),
+        t(key)
+      );
+    }
+
+    function cancelReveal() {
+      if (revealTimer) clearTimeout(revealTimer);
+      if (countdownTimer) clearInterval(countdownTimer);
+      revealTimer = null;
+      countdownTimer = null;
     }
 
     function setLanguage(nextLanguage) {
@@ -987,7 +1087,7 @@
 
       if (currentErrorKey) elements.error.textContent = t(currentErrorKey);
       try { localStorage.setItem("fundamatics-language", language); } catch (_) {}
-      if (currentAnalysis) renderAnalysis(currentAnalysis);
+      if (currentAnalysis) renderAnalysis(currentAnalysis, revealComplete);
     }
 
     function superscript(number) {
@@ -1109,7 +1209,7 @@
       }).join("");
     }
 
-    function highlightedPolynomial(source, leading) {
+    function highlightedPolynomial(source, leading, focus) {
       const entries = polynomialEntries(source);
       if (entries.length === 0) return "0";
 
@@ -1119,22 +1219,33 @@
         const coefficientText = degree > 0 && absolute === 1 ? "" : formatNumber(absolute);
         const sign = index === 0 ? negative ? "−" : "" : negative ? " − " : " + ";
         const isLeading = degree === leading.degree;
-        const aria = escapeHtml(t("powerAria").replace("{degree}", degree));
-        let variable = "";
+        const plainVariable = degree === 0 ? "" : degree === 1 ? "x" : `x${superscript(degree)}`;
 
+        if (focus === "coefficient" && isLeading) {
+          const signedCoefficient = formatNumber(coefficient);
+          const aria = escapeHtml(message("coefficientAria", { coefficient: signedCoefficient }));
+          if (degree > 0 && absolute === 1) {
+            const badge = `<span class="coefficient-badge" aria-label="${aria}">${escapeHtml(message("coefficientBadge", { coefficient: signedCoefficient }))}</span>`;
+            return `${sign}${plainVariable}${badge}`;
+          }
+          return `${sign}<span class="coefficient-focus" aria-label="${aria}">${coefficientText}</span>${plainVariable}`;
+        }
+
+        const aria = escapeHtml(message("powerAria", { degree }));
+        let variable = "";
         if (degree === 1) {
-          variable = isLeading
+          variable = isLeading && focus === "degree"
             ? `<span class="degree-focus" aria-label="${aria}">x</span>`
             : "x";
         } else if (degree > 1) {
           const exponent = superscript(degree);
-          variable = isLeading
+          variable = isLeading && focus === "degree"
             ? `x<span class="degree-focus" aria-label="${aria}">${exponent}</span>`
             : `x${exponent}`;
         }
 
-        const badge = isLeading && degree === 0
-          ? `<span class="degree-badge">${escapeHtml(t("degreeBadge").replace("{degree}", degree))}</span>`
+        const badge = isLeading && degree === 0 && focus === "degree"
+          ? `<span class="degree-badge">${escapeHtml(message("degreeBadge", { degree }))}</span>`
           : "";
         return `${sign}${coefficientText}${variable}${badge}`;
       }).join("");
@@ -1145,7 +1256,46 @@
       return String(Number(value.toFixed(3)));
     }
 
+    function implicitTerm(coefficient) {
+      if (coefficient === 1) return "x";
+      if (coefficient === -1) return "−x";
+      return `${formatNumber(coefficient)}x`;
+    }
+
+    function specialDegreeDetails(analysis) {
+      return [
+        { side: "Numerator", degree: analysis.numeratorLeading.degree, coefficient: analysis.numeratorLeading.coefficient },
+        { side: "Denominator", degree: analysis.denominatorLeading.degree, coefficient: analysis.denominatorLeading.coefficient }
+      ].filter((detail) => detail.degree === 0 || detail.degree === 1);
+    }
+
+    function degreeDetailMessage(detail) {
+      const side = t(`pauseSide${detail.side}`);
+      const coefficient = formatNumber(detail.coefficient);
+      return detail.degree === 0
+        ? message("pauseZeroDetail", { side, coefficient })
+        : message("pauseOneDetail", { side, coefficient, term: implicitTerm(detail.coefficient) });
+    }
+
+    function degreeLearningMessage(details) {
+      return details.map(degreeDetailMessage).join(" ");
+    }
+
+    function showLearningHint(details, seconds) {
+      const explanation = degreeLearningMessage(details);
+      const countdown = seconds === 1
+        ? t("pauseCountdownOne")
+        : message("pauseCountdown", { seconds });
+      elements.degreeHint.innerHTML = `<strong>${escapeHtml(t("pauseTitle"))}</strong><span>${escapeHtml(explanation)} ${escapeHtml(countdown)}</span>`;
+      elements.degreeHint.hidden = false;
+    }
+
     function analyze() {
+      cancelReveal();
+      revealVersion += 1;
+      revealComplete = false;
+      elements.degreeHint.hidden = true;
+      elements.functionBox.classList.remove("is-learning");
       try {
         const [numerator, denominator] = splitFraction(elements.input.value);
         const numeratorLeading = parsePolynomial(numerator);
@@ -1175,15 +1325,52 @@
       }
     }
 
-    function renderAnalysis(analysis) {
+    function renderLearningPause(analysis, details) {
+      const token = ++revealVersion;
+      elements.numView.textContent = canonicalPolynomial(analysis.numerator);
+      elements.denView.textContent = canonicalPolynomial(analysis.denominator);
+      elements.wL.textContent = "?";
+      elements.wR.textContent = "?";
+      elements.scene.className = "balance-area learning-pause";
+      elements.functionBox.classList.add("is-learning");
+      const explanation = degreeLearningMessage(details);
+      elements.explanation.innerHTML = `<p>${escapeHtml(explanation)}</p>`;
+      elements.answer.textContent = t("pauseAnswer");
+
+      let remaining = 5;
+      showLearningHint(details, remaining);
+      countdownTimer = setInterval(() => {
+        remaining -= 1;
+        if (remaining > 0) showLearningHint(details, remaining);
+      }, 1000);
+      revealTimer = setTimeout(() => {
+        if (token !== revealVersion) return;
+        cancelReveal();
+        revealComplete = true;
+        renderAnalysis(currentAnalysis, true);
+      }, 5000);
+    }
+
+    function renderAnalysis(analysis, skipDelay = false) {
+      cancelReveal();
+      const details = specialDegreeDetails(analysis);
+      if (!skipDelay && details.length) {
+        renderLearningPause(analysis, details);
+        return;
+      }
+
+      revealComplete = true;
+      elements.degreeHint.hidden = true;
+      elements.functionBox.classList.remove("is-learning");
       const { numerator, denominator, numeratorLeading: nl, denominatorLeading: dl } = analysis;
-      elements.numView.innerHTML = highlightedPolynomial(numerator, nl);
-      elements.denView.innerHTML = highlightedPolynomial(denominator, dl);
+      const focus = nl.degree === dl.degree ? "coefficient" : "degree";
+      elements.numView.innerHTML = highlightedPolynomial(numerator, nl, focus);
+      elements.denView.innerHTML = highlightedPolynomial(denominator, dl, focus);
       elements.wL.textContent = powerLabel(nl.degree);
       elements.wR.textContent = powerLabel(dl.degree);
       elements.scene.className = "balance-area";
 
-      const degrees = t("degreeSummary").replace("{n}", nl.degree).replace("{d}", dl.degree);
+      const degrees = message("degreeSummary", { n: nl.degree, d: dl.degree });
       let explanationKey;
       let answer;
       let calculation = "";
