@@ -237,6 +237,15 @@
       border-radius: 24px;
     }
 
+    .question-prompt {
+      max-width: 720px;
+      margin: 0 auto 12px;
+      color: var(--primary);
+      font-size: clamp(1.05rem, 2.1vw, 1.35rem);
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
     .section-label {
       margin-block-end: 12px;
       color: var(--blue);
@@ -423,6 +432,49 @@
       gap: 10px;
       margin-block-start: 10px;
     }
+
+    .self-quiz-control {
+      width: min(560px, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin: 12px auto 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    .quiz-toggle,
+    .duration-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      font-size: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .quiz-toggle input {
+      width: 18px;
+      height: 18px;
+      margin: 0;
+      accent-color: var(--brand-purple);
+    }
+
+    .duration-control select {
+      min-height: 36px;
+      padding: 4px 10px;
+      color: var(--ink);
+      background: var(--white);
+      border: 1px solid #b7c4d6;
+      border-radius: 999px;
+      font: inherit;
+      font-weight: 750;
+    }
+
+    .duration-control[hidden] { display: none; }
 
     .action {
       min-height: 48px;
@@ -702,8 +754,8 @@
       .panel {
         display: grid;
         grid-template-areas:
-          "stage"
           "sidebar"
+          "stage"
           "results";
         gap: 12px;
       }
@@ -754,6 +806,7 @@
       label { margin-block-end: 4px; font-size: .86rem; }
       textarea { min-height: 54px; height: 54px; padding: 7px; font-size: .8rem; }
       .buttons { gap: 7px; margin-block-start: 5px; }
+      .self-quiz-control { margin-block-start: 6px; font-size: .72rem; }
       .action { min-height: 38px; padding: 7px 9px; font-size: .8rem; }
       .balance-area { height: clamp(360px, calc(100vh - 350px), 420px); min-height: 360px; }
       .result-card { min-height: 120px; padding: 10px 12px; }
@@ -796,6 +849,7 @@
       .fundamatics-home-link { align-self: stretch; text-align: center; }
       .panel { padding: 20px; border-radius: 18px; }
       .buttons { grid-template-columns: 1fr; }
+      .question-prompt { font-size: 1.05rem; }
       .card, .result-card { padding: 16px; }
       .balance-area { min-height: 300px; height: 330px; }
       .balance-illustration { inset-inline: -7%; width: 114%; }
@@ -833,7 +887,8 @@
 
     <main id="main" class="panel">
       <div class="sidebar">
-        <section class="function-box" aria-labelledby="function-title">
+        <section class="function-box" aria-labelledby="question-title">
+          <h2 class="question-prompt" id="question-title" data-i18n="questionPrompt">האם לפונקציה הרציונלית הבאה יש אסימפטוטה אופקית? אם כן, מהי?</h2>
           <div class="section-label" id="function-title" data-i18n="functionTitle">הפונקציה הרציונלית</div>
           <div class="fraction" aria-live="polite">
             <div class="polynomial" id="numView">3x² + 1</div>
@@ -842,8 +897,24 @@
           </div>
           <div id="degreeLearningHint" class="degree-learning-hint" role="status" aria-live="polite" hidden></div>
           <div class="buttons function-actions">
-            <button class="action" id="analyzeButton" type="button" data-i18n="analyze">נתחו פונקציה</button>
-            <button class="action secondary" id="randomButton" type="button" data-i18n="random">הגרילו פונקציה</button>
+            <button class="action" id="analyzeButton" type="button" data-i18n="analyze">פתור את השאלה</button>
+            <button class="action secondary" id="randomButton" type="button" data-i18n="random">שאלה חדשה</button>
+          </div>
+          <div class="self-quiz-control">
+            <label class="quiz-toggle" for="timedQuiz">
+              <input id="timedQuiz" type="checkbox">
+              <span data-i18n="timedQuiz">מצב חידון עצמי: חשיפת תשובה לאחר השהיה</span>
+            </label>
+            <label class="duration-control" id="durationControl" for="quizSeconds" hidden>
+              <span data-i18n="revealAfter">חשפו לאחר</span>
+              <select id="quizSeconds" data-i18n-aria-label="quizSecondsLabel">
+                <option value="5">5</option>
+                <option value="10" selected>10</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+              </select>
+              <span data-i18n="seconds">שניות</span>
+            </label>
           </div>
         </section>
 
@@ -960,6 +1031,7 @@
         homeLink: "חזרה ל־Fundamatics",
         title: "מאזניים לאסימפטוטה אופקית",
         subtitle: "מי כבד יותר — המונה או המכנה? משווים דרגות ומגלים לאן הפונקציה מתקרבת.",
+        questionPrompt: "האם לפונקציה הרציונלית הבאה יש אסימפטוטה אופקית? אם כן, מהי?",
         functionTitle: "הפונקציה הרציונלית",
         rulesTitle: "איך המאזניים פועלים?",
         ruleNumeratorTitle: "המונה כבד יותר",
@@ -970,8 +1042,12 @@
         ruleEqualText: "הדרגות שוות ← מחלקים את המקדמים המובילים.",
         inputLabel: "הכניסו פונקציה רציונלית",
         example: "למשל:",
-        analyze: "נתחו פונקציה",
-        random: "הגרילו פונקציה",
+        analyze: "פתור את השאלה",
+        random: "שאלה חדשה",
+        timedQuiz: "מצב חידון עצמי: חשיפת תשובה לאחר השהיה",
+        revealAfter: "חשפו לאחר",
+        seconds: "שניות",
+        quizSecondsLabel: "מספר שניות עד לחשיפת התשובה",
         sceneLabel: "הדמיית מאזניים המשווה בין דרגות המונה והמכנה",
         scaleTitle: "מאזניים עם משקולות של דרגות המונה והמכנה",
         scaleDescription: "הצד בעל החזקה הגבוהה יותר יורד וממחיש איזו דרגה כבדה יותר.",
@@ -1003,7 +1079,9 @@
         pauseGeneral: "לפני שחושפים את הניתוח, נסו לזהות בעצמכם את החזקה הגבוהה ביותר במונה ובמכנה.",
         pauseCountdown: "חושפים את הניתוח בעוד {seconds} שניות…",
         pauseCountdownOne: "חושפים את הדרגה בעוד שנייה אחת…",
-        pauseAnswer: "עוד רגע…"
+        pauseAnswer: "עוד רגע…",
+        readyExplanation: "אפשר לחשוב איזו דרגה גבוהה יותר, ואז לבחור „פתור את השאלה”.",
+        readyAnswer: "?"
       },
       en: {
         documentTitle: "Fundamatics — Horizontal Asymptote Balance",
@@ -1015,6 +1093,7 @@
         homeLink: "Back to Fundamatics",
         title: "The Horizontal Asymptote Balance",
         subtitle: "Which is heavier—the numerator or the denominator? Compare degrees and discover where the function is heading.",
+        questionPrompt: "Does the following rational function have a horizontal asymptote? If so, what is it?",
         functionTitle: "The rational function",
         rulesTitle: "How does the balance work?",
         ruleNumeratorTitle: "The numerator is heavier",
@@ -1025,8 +1104,12 @@
         ruleEqualText: "The degrees are equal → divide the leading coefficients.",
         inputLabel: "Enter a rational function",
         example: "Example:",
-        analyze: "Analyze function",
-        random: "Try a random function",
+        analyze: "Solve the question",
+        random: "New question",
+        timedQuiz: "Self-quiz mode: reveal the answer after a delay",
+        revealAfter: "Reveal after",
+        seconds: "seconds",
+        quizSecondsLabel: "Seconds until the answer is revealed",
         sceneLabel: "A balance comparing the degrees of the numerator and denominator",
         scaleTitle: "A balance with weights for the numerator and denominator degrees",
         scaleDescription: "The side with the higher power moves down to show which degree is heavier.",
@@ -1058,7 +1141,9 @@
         pauseGeneral: "Before revealing the analysis, try to identify the highest exponent in the numerator and denominator.",
         pauseCountdown: "The analysis will be revealed in {seconds} seconds…",
         pauseCountdownOne: "The degree will be revealed in 1 second…",
-        pauseAnswer: "One moment…"
+        pauseAnswer: "One moment…",
+        readyExplanation: "Decide which degree is higher. When you are ready, choose “Solve the question”.",
+        readyAnswer: "?"
       }
     };
 
@@ -1075,7 +1160,10 @@
       degreeHint: document.getElementById("degreeLearningHint"),
       functionBox: document.querySelector(".function-box"),
       analyze: document.getElementById("analyzeButton"),
-      random: document.getElementById("randomButton")
+      random: document.getElementById("randomButton"),
+      timedQuiz: document.getElementById("timedQuiz"),
+      durationControl: document.getElementById("durationControl"),
+      quizSeconds: document.getElementById("quizSeconds")
     };
 
     let language = "he";
@@ -1122,7 +1210,10 @@
 
       if (currentErrorKey) elements.error.textContent = t(currentErrorKey);
       try { localStorage.setItem("fundamatics-language", language); } catch (_) {}
-      if (currentAnalysis) renderAnalysis(currentAnalysis, revealComplete);
+      if (currentAnalysis) {
+        if (revealComplete) renderAnalysis(currentAnalysis, true);
+        else renderQuestion(currentAnalysis);
+      }
     }
 
     function superscript(number) {
@@ -1325,7 +1416,7 @@
       elements.degreeHint.hidden = false;
     }
 
-    function analyze() {
+    function parseCurrentFunction() {
       cancelReveal();
       revealVersion += 1;
       revealComplete = false;
@@ -1350,17 +1441,47 @@
         currentErrorKey = null;
         elements.input.setAttribute("aria-invalid", "false");
         elements.error.textContent = "";
-        renderAnalysis(currentAnalysis);
+        return currentAnalysis;
       } catch (error) {
         const key = translations[language][error.message] ? error.message : "errorPolynomial";
         currentErrorKey = key;
         elements.input.setAttribute("aria-invalid", "true");
         elements.error.textContent = t(key);
         elements.input.focus();
+        return null;
       }
     }
 
-    function renderLearningPause(analysis, details) {
+    function renderQuestion(analysis) {
+      cancelReveal();
+      revealComplete = false;
+      elements.degreeHint.hidden = true;
+      elements.functionBox.classList.remove("is-learning");
+      elements.numView.textContent = canonicalPolynomial(analysis.numerator);
+      elements.denView.textContent = canonicalPolynomial(analysis.denominator);
+      elements.wL.textContent = "?";
+      elements.wR.textContent = "?";
+      elements.scene.className = "balance-area learning-pause";
+      elements.explanation.innerHTML = `<p>${escapeHtml(t("readyExplanation"))}</p>`;
+      elements.answer.textContent = t("readyAnswer");
+    }
+
+    function prepareQuestion() {
+      const analysis = parseCurrentFunction();
+      if (analysis) renderQuestion(analysis);
+    }
+
+    function analyze() {
+      const analysis = parseCurrentFunction();
+      if (!analysis) return;
+      if (elements.timedQuiz.checked) {
+        renderLearningPause(analysis, specialDegreeDetails(analysis), Number(elements.quizSeconds.value));
+      } else {
+        renderAnalysis(analysis, true);
+      }
+    }
+
+    function renderLearningPause(analysis, details, duration) {
       const token = ++revealVersion;
       elements.numView.textContent = canonicalPolynomial(analysis.numerator);
       elements.denView.textContent = canonicalPolynomial(analysis.denominator);
@@ -1372,7 +1493,7 @@
       elements.explanation.innerHTML = `<p>${escapeHtml(explanation)}</p>`;
       elements.answer.textContent = t("pauseAnswer");
 
-      let remaining = 5;
+      let remaining = duration;
       showLearningHint(details, remaining);
       countdownTimer = setInterval(() => {
         remaining -= 1;
@@ -1383,14 +1504,14 @@
         cancelReveal();
         revealComplete = true;
         renderAnalysis(currentAnalysis, true);
-      }, 5000);
+      }, duration * 1000);
     }
 
     function renderAnalysis(analysis, skipDelay = false) {
       cancelReveal();
       const details = specialDegreeDetails(analysis);
       if (!skipDelay) {
-        renderLearningPause(analysis, details);
+        renderLearningPause(analysis, details, Number(elements.quizSeconds.value));
         return;
       }
 
@@ -1447,7 +1568,7 @@
       const numerator = randomPolynomial(numeratorCoefficient, numeratorDegree, 1, "+");
       const denominator = randomPolynomial(denominatorCoefficient, denominatorDegree, 1, "+");
       elements.input.value = `(${numerator})/(${denominator})`;
-      analyze();
+      prepareQuestion();
     }
 
     document.querySelectorAll("[data-language]").forEach((button) => {
@@ -1455,6 +1576,9 @@
     });
     elements.analyze.addEventListener("click", analyze);
     elements.random.addEventListener("click", randomFunction);
+    elements.timedQuiz.addEventListener("change", () => {
+      elements.durationControl.hidden = !elements.timedQuiz.checked;
+    });
     elements.input.addEventListener("keydown", (event) => {
       if ((event.ctrlKey || event.metaKey) && event.key === "Enter") analyze();
     });
@@ -1466,7 +1590,8 @@
     } catch (_) {}
 
     setLanguage(preferredLanguage);
-    analyze();
+    prepareQuestion();
+    requestAnimationFrame(() => elements.analyze.focus({ preventScroll: true }));
   </script>
 </body>
 </html>
