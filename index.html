@@ -860,6 +860,8 @@
     }
   </style>
   <script src="/simulator-access-guard.js"></script>
+<link rel="stylesheet" href="language-support.css">
+<script src="language-support.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main" data-i18n="skip">דלגו לתוכן</a>
@@ -881,6 +883,7 @@
         <div class="language-switcher" role="group" aria-label="בחירת שפה" data-i18n-aria-label="languageLabel">
           <button type="button" data-language="he" aria-pressed="true" lang="he" data-i18n="languageHebrew">עברית</button>
           <button type="button" data-language="en" aria-pressed="false" lang="en" data-i18n="languageEnglish">English</button>
+<button class="language-option" type="button" data-language="ar" lang="ar" dir="rtl" aria-pressed="false">العربية</button>
         </div>
         <a class="fundamatics-home-link" href="https://fundamatics.com/" data-i18n="homeLink">חזרה ל־Fundamatics</a>
       </div>
@@ -1022,6 +1025,68 @@
 
   <script>
     const translations = {
+  ar: {
+    "documentTitle": "Fundamatics | ميزان خط التقارب الأفقي",
+    "skip": "انتقل إلى المحتوى",
+    "headerAria": "ميزان خط التقارب الأفقي من Fundamatics",
+    "languageLabel": "اختر اللغة",
+    "languageHebrew": "עברית",
+    "languageEnglish": "English",
+    "homeLink": "العودة إلى Fundamatics",
+    "title": "ميزان خط التقارب الأفقي",
+    "subtitle": "أيهما أثقل، البسط أم المقام؟ قارن الدرجات واكتشف إلى أين تتجه الدالة.",
+    "questionPrompt": "هل للدالة النسبية التالية خط تقارب أفقي؟ إذا كان كذلك، فما هو؟",
+    "functionTitle": "الدالة النسبية",
+    "rulesTitle": "كيف يعمل الميزان؟",
+    "ruleNumeratorTitle": "البسط أثقل",
+    "ruleNumeratorText": "درجته أعلى ← لا يوجد خط تقارب أفقي.",
+    "ruleDenominatorTitle": "المقام أثقل",
+    "ruleDenominatorText": "درجته أعلى ← تقترب الدالة من ⁦y = 0⁩.",
+    "ruleEqualTitle": "الوزنان متساويان",
+    "ruleEqualText": "الدرجتان متساويتان ← اقسم المعاملين الرئيسيين.",
+    "inputLabel": "أدخل دالة نسبية",
+    "example": "مثال:",
+    "analyze": "حلّ السؤال",
+    "random": "سؤال جديد",
+    "timedQuiz": "اختبار ذاتي: أظهر الإجابة بعد مهلة",
+    "revealAfter": "أظهر بعد",
+    "seconds": "ثوانٍ",
+    "quizSecondsLabel": "عدد الثواني حتى ظهور الإجابة",
+    "sceneLabel": "ميزان يقارن درجتي البسط والمقام",
+    "scaleTitle": "ميزان بأوزان تمثل درجتي البسط والمقام",
+    "scaleDescription": "يهبط الجانب ذو الأس الأعلى ليبيّن أي الدرجتين أثقل.",
+    "numeratorLabel": "البسط",
+    "denominatorLabel": "المقام",
+    "skyMessage": "البسط أثقل ← ننطلق إلى الأعلى 🚀",
+    "groundMessage": "المقام أثقل ← نقترب من ⁦y = 0⁩ 🌱",
+    "judge": "وزنان متساويان، نتحقق من المعاملين",
+    "explanationTitle": "ماذا يخبرنا الميزان؟",
+    "answerTitle": "خط التقارب الأفقي",
+    "footer": "Fundamatics · رياضيات نفهمها، لا نحفظها فقط.",
+    "errorFormat": "اكتب الدالة على الصورة (البسط)/(المقام).",
+    "errorPolynomial": "تحقق من أن البسط والمقام كثيرتا حدود صحيحتان في x.",
+    "errorDenominator": "لا يمكن أن يكون المقام كثيرة الحدود الصفرية.",
+    "numeratorHeavy": "درجة البسط أعلى، لذلك لا تستقر الدالة مقتربة من قيمة منتهية.",
+    "denominatorHeavy": "درجة المقام أعلى. يصبح البسط ضئيلًا بالمقارنة، فتقترب قيمة الكسر من 0.",
+    "equalHeavy": "الدرجتان متساويتان، لذا يُحدَّد خط التقارب بنسبة المعاملين الرئيسيين.",
+    "none": "لا يوجد",
+    "degreeSummary": "درجة البسط: ⁦{n}⁩ · درجة المقام: ⁦{d}⁩",
+    "powerAria": "الأس الأعلى ⁦{degree}⁩",
+    "degreeBadge": "الأس ⁦{degree}⁩",
+    "coefficientAria": "المعامل الرئيسي ⁦{coefficient}⁩",
+    "coefficientBadge": "المعامل ⁦{coefficient}⁩",
+    "pauseTitle": "وقفة رياضية",
+    "pauseSideNumerator": "في البسط",
+    "pauseSideDenominator": "في المقام",
+    "pauseZeroDetail": "{side}: العدد ⁦{coefficient}⁩ هو في الحقيقة ⁦{coefficient}·x⁰⁩، لذا درجته 0. لا نكتب ⁦x⁰⁩ عادةً.",
+    "pauseOneDetail": "{side}: الحد ⁦{term}⁩ هو في الحقيقة ⁦{coefficient}·x¹⁩، لذا درجته 1. لا نكتب الأس 1 عادةً.",
+    "pauseGeneral": "قبل إظهار التحليل، حاول تحديد أعلى أس في البسط والمقام.",
+    "pauseCountdown": "سيظهر التحليل بعد ⁦{seconds}⁩ ثانية…",
+    "pauseCountdownOne": "ستظهر الدرجة بعد ثانية واحدة…",
+    "pauseAnswer": "لحظة واحدة…",
+    "readyExplanation": "حدّد أي الدرجتين أعلى. عندما تكون مستعدًا، اختر «حلّ السؤال».",
+    "readyAnswer": "؟"
+},
       he: {
         documentTitle: "Fundamatics — מאזניים לאסימפטוטה אופקית",
         skip: "דלגו לתוכן",
@@ -1194,9 +1259,10 @@
     }
 
     function setLanguage(nextLanguage) {
+      if (!Object.hasOwn(translations, nextLanguage)) return;
       language = nextLanguage;
       document.documentElement.lang = language;
-      document.documentElement.dir = language === "he" ? "rtl" : "ltr";
+      document.documentElement.dir = ["he", "ar"].includes(language) ? "rtl" : "ltr";
       document.title = t("documentTitle");
 
       document.querySelectorAll("[data-i18n]").forEach((node) => {
@@ -1587,9 +1653,11 @@
     let preferredLanguage = "he";
     try {
       const saved = localStorage.getItem("fundamatics-language");
-      if (saved === "he" || saved === "en") preferredLanguage = saved;
+      if (Object.hasOwn(translations, saved)) preferredLanguage = saved;
     } catch (_) {}
 
+    const requestedLanguage = new URLSearchParams(window.location.search).get("lang");
+    if (Object.hasOwn(translations, requestedLanguage)) preferredLanguage = requestedLanguage;
     setLanguage(preferredLanguage);
     prepareQuestion();
     requestAnimationFrame(() => elements.analyze.focus({ preventScroll: true }));
